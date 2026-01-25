@@ -116,12 +116,11 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
       .dropdown summary {
         list-style: none;
         cursor: pointer;
+        display: block;
+        touch-action: manipulation;
       }
       .dropdown summary::-webkit-details-marker {
         display: none;
-      }
-      .dropdown summary.toplink {
-        display: inline-block;
       }
       .menu {
         display: none;
@@ -231,8 +230,31 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
         }
 
         .nav {
-          flex-wrap: wrap;
+          flex-wrap: nowrap;
           gap: 10px 14px;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: auto;
+          scrollbar-color: #ffffff #1a1a1a;
+        }
+
+        .nav > * {
+          flex: 0 0 auto;
+        }
+
+        .nav::-webkit-scrollbar {
+          height: 10px;
+        }
+
+        .nav::-webkit-scrollbar-track {
+          background: #1a1a1a;
+          border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .nav::-webkit-scrollbar-thumb {
+          background: linear-gradient(180deg, #f2f2f2 0%, #cfcfcf 100%);
+          border: 1px solid rgba(0, 0, 0, 0.4);
+          box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
         }
 
         .dropdown .menu {
