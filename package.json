@@ -4,11 +4,17 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
+    "chat-server": "node chat-server.js",
+    "dev:all": "concurrently \"npm run dev\" \"npm run chat-server\"",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.16.15"
+    "astro": "^5.16.15",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
   }
 }

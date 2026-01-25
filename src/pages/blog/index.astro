@@ -1,24 +1,18 @@
 ---
 import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
 
 const posts = (await getCollection("blog"))
   .sort((a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Blog</title>
-  </head>
-  <body>
-    <h1>Blog</h1>
-    <ul>
-      {posts.map((post: CollectionEntry<"blog">) => (
-        <li>
-          <a href={`/blog/${post.id}/`}>{post.data.title}</a>
-        </li>
-      ))}
-    </ul>
-  </body>
-</html>
+<Layout>
+  <h1>Blog</h1>
+  <ul>
+    {posts.map((post: CollectionEntry<"blog">) => (
+      <li>
+        <a href={`/blog/${post.id}/`}>{post.data.title}</a>
+      </li>
+    ))}
+  </ul>
+</Layout>

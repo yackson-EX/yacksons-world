@@ -1,0 +1,685 @@
+---
+// Chat Widget Component
+---
+
+<div id="chat-widget" class="chat-widget">
+  <div class="chat-header">
+    <h3>Chat</h3>
+    <button id="toggle-chat" class="toggle-btn">−</button>
+  </div>
+  
+  <div class="chat-content">
+    <div id="messages-container" class="messages-container">
+      <!-- Messages will appear here -->
+    </div>
+    
+    <div class="chat-input-area">
+      <input 
+        type="file" 
+        id="image-input" 
+        accept="image/*" 
+        class="image-input-hidden"
+        multiple
+      />
+      <div class="input-row">
+        <button id="image-btn" class="image-btn" title="Upload image">📷</button>
+        <input 
+          type="text" 
+          id="message-input" 
+          placeholder="Type a message..." 
+          class="message-input"
+        />
+      </div>
+      <div class="button-row">
+        <button id="send-btn" class="send-btn">Send</button>
+        <button id="flush-btn" class="flush-btn-bottom" title="Clear all messages">🗑️ Clear All</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Image Modal -->
+<div id="image-modal" class="image-modal">
+  <span class="image-modal-close">&times;</span>
+  <img id="modal-image" src="" alt="Full size image" />
+</div>
+
+<style>
+  .chat-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 350px;
+    max-height: 500px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    font-family: system-ui, -apple-system, sans-serif;
+    transition: max-height 0.3s ease;
+  }
+
+  .chat-widget.collapsed {
+    max-height: fit-content;
+  }
+
+  .chat-header {
+    background: #4a5568;
+    color: white;
+    padding: 15px;
+    border-radius: 10px 10px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .chat-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .toggle-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  .toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+  }
+
+  .chat-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .chat-content.collapsed {
+    display: none;
+  }
+
+  .messages-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .message {
+    padding: 10px 12px;
+    border-radius: 8px;
+    max-width: 80%;
+    word-wrap: break-word;
+    animation: slideIn 0.2s ease-out;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .message.user {
+    background: #4299e1;
+    color: white;
+    align-self: flex-end;
+    margin-left: auto;
+  }
+
+  .message.other {
+    background: #edf2f7;
+    color: #2d3748;
+    align-self: flex-start;
+  }
+
+  .message-time {
+    font-size: 11px;
+    opacity: 0.7;
+    margin-top: 4px;
+  }
+
+  .message-image {
+    width: 200px !important;
+    height: auto !important;
+    max-height: 150px !important;
+    border-radius: 6px;
+    margin-top: 5px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    display: block;
+    object-fit: contain;
+  }
+
+  .message-image:hover {
+    transform: scale(1.02);
+  }
+
+  .image-modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    align-items: center;
+    justify-content: center;
+  }
+
+  .image-modal.active {
+    display: flex;
+  }
+
+  .image-modal img {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 8px;
+  }
+
+  .image-modal-close {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .image-modal-close:hover {
+    color: #ccc;
+  }
+
+  .chat-input-area {
+    border-top: 1px solid #e2e8f0;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: white;
+    position: relative;
+    z-index: 10;
+  }
+
+  .input-row {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .button-row {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .image-input-hidden {
+    display: none;
+  }
+
+  .image-btn {
+    padding: 10px 12px;
+    background: #48bb78;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background 0.2s;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .image-btn:hover {
+    background: #38a169;
+  }
+
+  .image-btn:active {
+    background: #2f855a;
+  }
+
+  .image-preview-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 80px;
+    overflow-y: auto;
+    margin-bottom: 4px;
+  }
+
+  .image-preview-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 6px;
+    background: #f7fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+
+  .image-preview-wrapper .file-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #4a5568;
+  }
+
+  .remove-image {
+    background: #e53e3e;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 2px 6px;
+    cursor: pointer;
+    font-size: 11px;
+    line-height: 1;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .remove-image:hover {
+    background: rgba(220, 38, 38, 1);
+  }
+
+  .message-input {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e0;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+  }
+
+  .message-input:focus {
+    border-color: #4299e1;
+  }
+
+  .send-btn {
+    flex: 1;
+    padding: 12px 20px;
+    background: #4299e1;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    transition: background 0.2s;
+  }
+
+  .send-btn:hover {
+    background: #3182ce;
+  }
+
+  .send-btn:active {
+    background: #2c5282;
+  }
+
+  .send-btn:disabled {
+    background: #a0aec0;
+    cursor: not-allowed;
+  }
+
+  .flush-btn-bottom {
+    flex: 1;
+    padding: 12px 20px;
+    background: #e53e3e;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    transition: background 0.2s;
+  }
+
+  .flush-btn-bottom:hover {
+    background: #c53030;
+  }
+
+  .flush-btn-bottom:active {
+    background: #9b2c2c;
+  }
+
+  /* Scrollbar styling */
+  .messages-container::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .messages-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  .messages-container::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 3px;
+  }
+
+  .messages-container::-webkit-scrollbar-thumb:hover {
+    background: #a0aec0;
+  }
+
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .chat-widget {
+      width: calc(100% - 40px);
+      height: 400px;
+      bottom: 10px;
+      right: 10px;
+      left: 10px;
+    }
+  }
+</style>
+
+<script>
+  // Chat functionality
+  const messagesContainer = document.getElementById('messages-container');
+  const messageInput = document.getElementById('message-input') as HTMLInputElement;
+  const sendBtn = document.getElementById('send-btn') as HTMLButtonElement;
+  const toggleBtn = document.getElementById('toggle-chat');
+  const flushBtn = document.getElementById('flush-btn');
+  const chatContent = document.querySelector('.chat-content');
+  const imageBtn = document.getElementById('image-btn');
+  const imageInput = document.getElementById('image-input') as HTMLInputElement;
+  const imageModal = document.getElementById('image-modal');
+  const modalImage = document.getElementById('modal-image') as HTMLImageElement;
+  const modalClose = document.querySelector('.image-modal-close');
+
+  // WebSocket connection
+  let ws: WebSocket | null = null;
+  let reconnectTimeout: number | null = null;
+  
+  // Messages and images
+  let messages: Array<{text?: string, image?: string, time: string, type: 'user' | 'other'}> = [];
+  let pendingImages: Array<{name: string, data: string}> = [];
+
+  function connectWebSocket() {
+    try {
+      ws = new WebSocket('ws://localhost:8080');
+      
+      ws.onopen = () => {
+        if (sendBtn) sendBtn.disabled = false;
+      };
+
+      ws.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          
+          if (data.type === 'history') {
+            // Load message history from server
+            messages = data.messages || [];
+            renderMessages();
+          } else if (data.type === 'new_message') {
+            // Add new message from server
+            messages.push(data.message);
+            
+            // Keep only last 100 messages
+            if (messages.length > 100) {
+              messages.shift();
+            }
+            
+            renderMessages();
+          } else if (data.type === 'flush') {
+            // Clear all messages
+            messages = [];
+            renderMessages();
+          }
+        } catch (err) {
+          // Error parsing message
+        }
+      };
+
+      ws.onerror = (error) => {
+        // WebSocket error
+      };
+
+      ws.onclose = () => {
+        if (sendBtn) sendBtn.disabled = true;
+        
+        // Attempt to reconnect after 3 seconds
+        reconnectTimeout = window.setTimeout(() => {
+          connectWebSocket();
+        }, 3000);
+      };
+    } catch (err) {
+      if (sendBtn) sendBtn.disabled = true;
+    }
+  }
+
+  function renderMessages() {
+    if (!messagesContainer) return;
+    
+    messagesContainer.innerHTML = '';
+    messages.forEach((msg, index) => {
+      const messageEl = document.createElement('div');
+      messageEl.className = `message ${msg.type}`;
+      
+      let content = '';
+      if (msg.text) {
+        content += `<div>${msg.text}</div>`;
+      }
+      if (msg.image) {
+        content += `<img src="${msg.image}" class="message-image" data-index="${index}" alt="Uploaded image" style="max-width: 200px; max-height: 150px; width: auto; height: auto; display: block;" />`;
+      }
+      content += `<div class="message-time">${msg.time}</div>`;
+      
+      messageEl.innerHTML = content;
+      messagesContainer.appendChild(messageEl);
+    });
+    
+    // Add click handlers for images
+    const images = messagesContainer.querySelectorAll('.message-image');
+    images.forEach(img => {
+      img.addEventListener('click', () => {
+        const index = (img as HTMLElement).dataset.index;
+        if (index && modalImage && imageModal) {
+          modalImage.src = messages[parseInt(index)].image || '';
+          imageModal.classList.add('active');
+        }
+      });
+    });
+    
+    // Scroll to bottom
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+
+  function renderPendingImages() {
+    const inputArea = document.querySelector('.chat-input-area');
+    const existingContainer = document.querySelector('.image-preview-container');
+    if (existingContainer) {
+      existingContainer.remove();
+    }
+    
+    if (pendingImages.length > 0 && inputArea) {
+      const container = document.createElement('div');
+      container.className = 'image-preview-container';
+      
+      pendingImages.forEach((img, index) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'image-preview-wrapper';
+        wrapper.innerHTML = `
+          <span class="file-name">${img.name}</span>
+          <button class="remove-image" data-index="${index}">Remove</button>
+        `;
+        container.appendChild(wrapper);
+      });
+      
+      // Insert at the top of input area
+      inputArea.insertBefore(container, inputArea.firstChild);
+      
+      // Add remove handlers
+      container.querySelectorAll('.remove-image').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const index = parseInt((e.target as HTMLElement).dataset.index || '0');
+          pendingImages.splice(index, 1);
+          renderPendingImages();
+        });
+      });
+    }
+  }
+
+  function addMessage(text?: string, image?: string, type: 'user' | 'other' = 'user') {
+    const now = new Date();
+    const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    
+    const message: any = { time, type };
+    if (text) message.text = text;
+    if (image) message.image = image;
+    
+    // Send to WebSocket server
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify({
+        type: 'message',
+        data: message
+      }));
+    }
+  }
+
+  function sendMessage() {
+    if (!messageInput) return;
+    
+    const text = messageInput.value.trim();
+    
+    if (text || pendingImages.length > 0) {
+      // Send images with text if only one image
+      if (pendingImages.length === 1) {
+        addMessage(text || undefined, pendingImages[0].data, 'user');
+      } else if (pendingImages.length > 1) {
+        // Send multiple images separately
+        pendingImages.forEach(img => {
+          addMessage(undefined, img.data, 'user');
+        });
+        // Send text separately if present
+        if (text) {
+          addMessage(text, undefined, 'user');
+        }
+      } else if (text) {
+        // Just text, no images
+        addMessage(text, undefined, 'user');
+      }
+      
+      messageInput.value = '';
+      pendingImages = [];
+      renderPendingImages();
+      messageInput.focus();
+    }
+  }
+
+  function handleImageSelect(e: Event) {
+    const target = e.target as HTMLInputElement;
+    const files = target.files;
+    
+    if (files && files.length > 0) {
+      const validImageTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'];
+      
+      Array.from(files).forEach(file => {
+        if (validImageTypes.includes(file.type.toLowerCase())) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const result = e.target?.result as string;
+            if (result) {
+              pendingImages.push({ name: file.name, data: result });
+              renderPendingImages();
+            }
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+    
+    // Reset input
+    target.value = '';
+  }
+
+  // Event listeners
+  if (sendBtn) {
+    sendBtn.addEventListener('click', sendMessage);
+  }
+
+  if (messageInput) {
+    messageInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    });
+  }
+
+  if (toggleBtn && chatContent) {
+    const chatWidget = document.getElementById('chat-widget');
+    toggleBtn.addEventListener('click', () => {
+      chatContent.classList.toggle('collapsed');
+      if (chatWidget) {
+        chatWidget.classList.toggle('collapsed');
+      }
+      toggleBtn.textContent = chatContent.classList.contains('collapsed') ? '+' : '−';
+    });
+  }
+
+  if (flushBtn) {
+    flushBtn.addEventListener('click', () => {
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ type: 'flush' }));
+      }
+    });
+  }
+
+  if (imageBtn && imageInput) {
+    imageBtn.addEventListener('click', () => {
+      imageInput.click();
+    });
+    
+    imageInput.addEventListener('change', handleImageSelect);
+  }
+
+  // Image modal handlers
+  if (modalClose && imageModal) {
+    modalClose.addEventListener('click', () => {
+      imageModal.classList.remove('active');
+    });
+    
+    imageModal.addEventListener('click', (e) => {
+      if (e.target === imageModal) {
+        imageModal.classList.remove('active');
+      }
+    });
+  }
+
+  // Connect to WebSocket server on init
+  connectWebSocket();
+  
+  // Cleanup on page unload
+  window.addEventListener('beforeunload', () => {
+    if (ws) {
+      ws.close();
+    }
+    if (reconnectTimeout) {
+      clearTimeout(reconnectTimeout);
+    }
+  });
+</script>
