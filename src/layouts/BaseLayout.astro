@@ -113,6 +113,16 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
       .toplink:hover { text-decoration: underline; }
 
       .dropdown { position: relative; }
+      .dropdown summary {
+        list-style: none;
+        cursor: pointer;
+      }
+      .dropdown summary::-webkit-details-marker {
+        display: none;
+      }
+      .dropdown summary.toplink {
+        display: inline-block;
+      }
       .menu {
         display: none;
         position: absolute;
@@ -127,8 +137,11 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
       .menu a { display: block; padding: 6px 0; text-decoration: none; }
       .menu a:hover { text-decoration: underline; }
 
+      .mobile-only { display: none; }
+
       .dropdown:hover .menu,
-      .dropdown:focus-within .menu {
+      .dropdown:focus-within .menu,
+      .dropdown[open] .menu {
         display: block;
       }
 
@@ -205,6 +218,54 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
         .main { grid-template-columns: 1fr; }
         .tile { width: 100%; }
       }
+
+      @media (max-width: 700px) {
+        .wrap {
+          padding: 40px 16px 20px;
+        }
+
+        header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 12px;
+        }
+
+        .nav {
+          flex-wrap: wrap;
+          gap: 10px 14px;
+        }
+
+        .dropdown .menu {
+          position: static;
+          border: 0;
+          padding: 6px 0 0;
+          min-width: auto;
+        }
+
+        .mobile-only { display: block; }
+
+        .main {
+          gap: 20px;
+        }
+
+        .side {
+          align-items: center;
+        }
+
+        .side-title {
+          width: min(320px, 90vw);
+          margin-top: 0;
+          margin-right: 0;
+        }
+
+        .tile {
+          width: min(200px, 70vw);
+        }
+
+        .tile img {
+          width: 100%;
+        }
+      }
     </style>
   </head>
 
@@ -216,14 +277,15 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
         </a>
 
         <nav class="nav">
-          <div class="dropdown">
-            <a class="toplink" href="/reviews/">Reviews</a>
+          <details class="dropdown">
+            <summary class="toplink">Reviews</summary>
             <div class="menu" aria-label="Reviews submenu">
+              <a class="mobile-only" href="/reviews/">All</a>
               {reviewNav.map((item) => (
                 <a href={`/reviews/${item.medium}/`}>{item.label}</a>
               ))}
             </div>
-          </div>
+          </details>
 
           <a class="toplink" href="/blog/">Blog</a>
           <a class="toplink" href="/photography/">Photography</a>

@@ -21,4 +21,15 @@ const reviews = defineCollection({
   }),
 });
 
-export const collections = { blog, reviews };
+const photography = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/photography" }),
+  schema: z.object({
+    title: z.string(),
+    pubDate: z.coerce.date(),
+    image: z.string(),
+    alt: z.string().optional(),
+    caption: z.string().optional(),
+  }),
+});
+
+export const collections = { blog, reviews, photography };
