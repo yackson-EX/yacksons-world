@@ -1,0 +1,22 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { normalizeMedium } from "../../../lib/reviews";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("reviews");
+  return posts.map((post) => ({
+    params: { medium: normalizeMedium(post.data.medium), slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props as { post: CollectionEntry<"reviews"> };
+const { Content } = await render(post);
+---
+
+<BaseLayout title={post.data.title}>
+  <a href={`/reviews/${normalizeMedium(post.data.medium)}/`}>Back</a>
+  <h1>{post.data.title}</h1>
+  <Content />
+</BaseLayout>

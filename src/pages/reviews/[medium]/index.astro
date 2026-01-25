@@ -1,0 +1,35 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import {
+  REVIEW_MEDIA,
+  REVIEW_MEDIA_LABELS,
+  isReviewMedium,
+  normalizeMedium,
+} from "../../../lib/reviews";
+
+export async function getStaticPaths() {
+  return REVIEW_MEDIA.map((medium) => ({ params: { medium } }));
+}
+
+const rawMedium = Astro.params.medium ?? "";
+const normalizedMedium = normalizeMedium(rawMedium);
+const activeMedium = isReviewMedium(normalizedMedium) ? normalizedMedium : null;
+
+const posts = (await getCollection("reviews"))
+  .filter((p) => normalizeMedium(p.data.medium) === normalizedMedium)
+  .sort((a: CollectionEntry<"reviews">, b: CollectionEntry<"reviews">) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const label = activeMedium ? REVIEW_MEDIA_LABELS[activeMedium] : normalizedMedium;
+---
+
+<BaseLayout title={`Reviews: ${label}`}>
+  <h1>Reviews: {label}</h1>
+  <ul>
+    {posts.map((post: CollectionEntry<"reviews">) => (
+      <li>
+        <a href={`/reviews/${normalizeMedium(post.data.medium)}/${post.id}/`}>{post.data.title}</a>
+      </li>
+    ))}
+  </ul>
+</BaseLayout>

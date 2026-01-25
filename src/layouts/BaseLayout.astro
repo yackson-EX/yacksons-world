@@ -1,5 +1,32 @@
 ---
+import { REVIEW_MEDIA, REVIEW_MEDIA_LABELS } from "../lib/reviews";
+
 const { title = "yacksons.world" } = Astro.props;
+
+const SIDEBAR_LINKS = {
+  gameUrl: "https://example.com",
+  musicUrl: "https://example.com",
+};
+
+const sidebarTiles = [
+  {
+    href: SIDEBAR_LINKS.gameUrl,
+    img: "/Tournament-of-Champions-Logo.png",
+    label: "Play my game",
+    alt: "Play my game",
+  },
+  {
+    href: SIDEBAR_LINKS.musicUrl,
+    img: "/Album-Art.jpg",
+    label: "Listen to my music",
+    alt: "Listen to my music",
+  },
+];
+
+const reviewNav = REVIEW_MEDIA.map((medium) => ({
+  medium,
+  label: REVIEW_MEDIA_LABELS[medium],
+}));
 ---
 
 <html lang="en">
@@ -38,6 +65,31 @@ const { title = "yacksons.world" } = Astro.props;
       }
 
       nav a:hover { text-decoration: underline; }
+
+      .nav { display: flex; align-items: center; gap: 14px; }
+      .toplink { text-decoration: none; }
+      .toplink:hover { text-decoration: underline; }
+
+      .dropdown { position: relative; }
+      .menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background: #000;
+        border: 1px solid rgba(255,255,255,0.25);
+        padding: 10px;
+        min-width: 160px;
+        z-index: 10;
+      }
+      .menu a { display: block; padding: 6px 0; text-decoration: none; }
+      .menu a:hover { text-decoration: underline; }
+
+      .dropdown:hover .menu,
+      .dropdown:focus-within .menu {
+        display: block;
+      }
+
 
       .main {
         display: grid;
@@ -98,11 +150,22 @@ const { title = "yacksons.world" } = Astro.props;
           <img class="logo pixel" src="/Yacksons-World-Logo.gif" alt="" />
         </a>
 
-        <nav>
-          <a href="/blog/">Blog</a>
-          <a href="/category/whatever/">Category</a>
-          <a href="/about/">About</a>
+        <nav class="nav">
+          <div class="dropdown">
+            <a class="toplink" href="/reviews/">Reviews</a>
+            <div class="menu" aria-label="Reviews submenu">
+              {reviewNav.map((item) => (
+                <a href={`/reviews/${item.medium}/`}>{item.label}</a>
+              ))}
+            </div>
+          </div>
+
+          <a class="toplink" href="/blog/">Blog</a>
+          <a class="toplink" href="/photography/">Photography</a>
+          <a class="toplink" href="/chat/">Chat</a>
+          <a class="toplink" href="/about/">About</a>
         </nav>
+
       </header>
 
       <div class="main">
@@ -111,15 +174,12 @@ const { title = "yacksons.world" } = Astro.props;
         </main>
 
         <aside class="side">
-          <a class="tile" href="https://example.com" target="_blank" rel="noopener">
-            <img src="/Tournament-of-Champions-Logo.png" alt="Play my shitgame" />
-            <div class="tile-label">Play my shitgame</div>
-          </a>
-
-          <a class="tile" href="https://example.com" target="_blank" rel="noopener">
-            <img src="/Album-Art.jpg" alt="Listen to my shitsongs" />
-            <div class="tile-label">Listen to my shitsongs</div>
-          </a>
+          {sidebarTiles.map((tile) => (
+            <a class="tile" href={tile.href} target="_blank" rel="noopener">
+              <img src={tile.img} alt={tile.alt} />
+              <div class="tile-label">{tile.label}</div>
+            </a>
+          ))}
         </aside>
       </div>
     </div>

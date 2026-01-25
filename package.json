@@ -3,8 +3,11 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
+    "sync:decap": "node scripts/sync-decap-config.mjs",
     "dev": "astro dev",
+    "predev": "npm run sync:decap",
     "build": "astro build",
+    "prebuild": "npm run sync:decap",
     "preview": "astro preview",
     "astro": "astro"
   },

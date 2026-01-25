@@ -17,3 +17,16 @@ collections:
       - { name: "pubDate", label: "Publish date", widget: "datetime" }
       - { name: "category", label: "Category", widget: "string" }
       - { name: "body", label: "Body", widget: "markdown" }
+  - name: "reviews"
+    label: "Reviews"
+    folder: "src/content/reviews"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { name: "title", label: "Title", widget: "string" }
+      - { name: "pubDate", label: "Publish date", widget: "datetime" }
+      - name: "medium"
+        label: "Type"
+        widget: "select"
+        options: ["games", "music", "movies", "tv-shows", "anime"]
+      - { name: "body", label: "Body", widget: "markdown" }
