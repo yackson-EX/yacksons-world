@@ -138,10 +138,15 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
 
       .mobile-only { display: none; }
 
-      .dropdown:hover .menu,
       .dropdown:focus-within .menu,
       .dropdown[open] .menu {
         display: block;
+      }
+
+      @media (hover: hover) and (pointer: fine) {
+        .dropdown:hover .menu {
+          display: block;
+        }
       }
 
 
