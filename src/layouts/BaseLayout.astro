@@ -4,22 +4,22 @@ import { REVIEW_MEDIA, REVIEW_MEDIA_LABELS } from "../lib/reviews";
 const { title = "yacksons.world" } = Astro.props;
 
 const SIDEBAR_LINKS = {
-  gameUrl: "https://example.com",
-  musicUrl: "https://example.com",
+  gameUrl: "https://tournamentofchampions.org",
+  musicUrl: "https://open.spotify.com/album/4geYwEY8WVG0cOIoWVza1c?si=etknNOFyQyeHQ-hfkUn7QQ",
 };
 
 const sidebarTiles = [
   {
     href: SIDEBAR_LINKS.gameUrl,
     img: "/Tournament-of-Champions-Logo.png",
-    label: "Play my game",
-    alt: "Play my game",
+    label: "Play my shitgame",
+    alt: "Play my shitgame",
   },
   {
     href: SIDEBAR_LINKS.musicUrl,
     img: "/Album-Art.jpg",
-    label: "Listen to my music",
-    alt: "Listen to my music",
+    label: "Listen to my shitsongs",
+    alt: "Listen to my shitsongs",
   },
 ];
 
@@ -33,6 +33,15 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Jacquard+12&family=EB+Garamond&display=swap"
+    />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>{title}</title>
     <style>
       :root { color-scheme: dark; }
@@ -41,22 +50,55 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
         margin: 0;
         background: #000;
         color: #fff;
-        font-family: system-ui, sans-serif;
+        font-family: "EB Garamond", Garamond, "Times New Roman", serif;
       }
 
+      :global(h1, h2, h3, h4, h5, h6, .nav, .tile-label) {
+        font-family: "Jacquard 12", "Palatino Linotype", "Book Antiqua",
+          Garamond, "Georgia", "Times New Roman", serif;
+        font-weight: 400;
+      }
+
+      :global(h1) { font-size: calc(2em + 10px); }
+      :global(h2) { font-size: calc(1.5em + 10px); }
+      :global(h3) { font-size: calc(1.17em + 10px); }
+      :global(h4) { font-size: calc(1em + 10px); }
+      :global(h5) { font-size: calc(0.83em + 10px); }
+      :global(h6) { font-size: calc(0.67em + 10px); }
+      :global(.nav) { font-size: calc(1em + 6px); }
+      :global(.tile-label) { font-size: calc(1em + 12px); }
+
       a { color: inherit; }
+
+      :global(ul) {
+        list-style: none;
+        padding-left: 0;
+        margin-left: 0;
+      }
+
+      :global(li) {
+        position: relative;
+        padding-left: 18px;
+      }
+
+      :global(li)::before {
+        content: "✶";
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
 
       .wrap {
         max-width: 900px;
         margin: 0 auto;
-        padding: 20px;
+        padding: 56px 20px 20px;
       }
 
       header {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        gap: 16px;
+        justify-content: flex-start;
+        gap: 24px;
       }
 
       nav a {
@@ -119,21 +161,44 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
         text-decoration: none;
       }
 
-      .tile {
-        width: 240px;
-        max-width: 100%;
+      .side {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
       }
 
-      .tile img {
+      .side-title {
+        width: 384px;
+        max-width: 100%;
+        margin-top: -85px;
+        margin-bottom: 12px;
+        margin-right: -40px;
+      }
+
+      .side-title img {
         width: 100%;
         height: auto;
         display: block;
       }
 
+      .tile {
+        width: 160px;
+        max-width: 100%;
+      }
+
+      .tile img {
+        width: 160px;
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+      }
+
       .tile-label {
         margin-top: 8px;
-        font-size: 14px;
+        font-size: inherit;
         opacity: 0.9;
+        text-align: center;
       }
 
       @media (max-width: 800px) {
@@ -174,6 +239,9 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
         </main>
 
         <aside class="side">
+          <div class="side-title" aria-hidden="true">
+            <img src="/Yacksons-World-Title.png" alt="" />
+          </div>
           {sidebarTiles.map((tile) => (
             <a class="tile" href={tile.href} target="_blank" rel="noopener">
               <img src={tile.img} alt={tile.alt} />
