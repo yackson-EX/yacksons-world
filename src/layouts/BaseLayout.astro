@@ -137,6 +137,7 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
       .menu a:hover { text-decoration: underline; }
 
       .mobile-only { display: none; }
+      .desktop-only { display: block; }
 
       .dropdown:focus-within .menu,
       .dropdown[open] .menu {
@@ -145,6 +146,10 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
 
       @media (hover: hover) and (pointer: fine) {
         .dropdown:hover .menu {
+          display: block;
+        }
+
+        .dropdown > summary:hover + .menu {
           display: block;
         }
       }
@@ -270,6 +275,7 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
         }
 
         .mobile-only { display: block; }
+        .desktop-only { display: none; }
 
         .main {
           gap: 20px;
@@ -304,10 +310,19 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
         </a>
 
         <nav class="nav">
-          <details class="dropdown">
+          <div class="dropdown desktop-only">
+            <a class="toplink" href="/reviews/">Reviews</a>
+            <div class="menu" aria-label="Reviews submenu">
+              {reviewNav.map((item) => (
+                <a href={`/reviews/${item.medium}/`}>{item.label}</a>
+              ))}
+            </div>
+          </div>
+
+          <details class="dropdown mobile-only">
             <summary class="toplink">Reviews</summary>
             <div class="menu" aria-label="Reviews submenu">
-              <a class="mobile-only" href="/reviews/">All</a>
+              <a href="/reviews/">All</a>
               {reviewNav.map((item) => (
                 <a href={`/reviews/${item.medium}/`}>{item.label}</a>
               ))}
