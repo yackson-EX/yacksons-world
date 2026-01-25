@@ -5,6 +5,6 @@ category: Test
 ---
 Reading this is proof that even an idiot can cobble together a website...
 
-![we did it, dood!](/uploads/prinny-gif.gif)
+![we did it, dood!](/uploads/prinny-gif.gif "we did it, dood!")
 
 Welcome to Yackson's World.
