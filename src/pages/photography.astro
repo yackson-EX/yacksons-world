@@ -97,6 +97,8 @@ const photos = (await getCollection("photography"))
       justify-content: center;
       padding: 24px;
       z-index: 999;
+      overscroll-behavior: contain;
+      touch-action: none;
     }
 
     .lightbox.is-open {
@@ -166,6 +168,13 @@ const photos = (await getCollection("photography"))
 
     .lightbox-prev { left: 6px; top: 50%; }
     .lightbox-next { right: 6px; top: calc(50% - 15px); transform: translateY(-50%) scaleX(-1); }
+
+    :global(html.lightbox-open),
+    :global(body.lightbox-open) {
+      overflow: hidden;
+      height: 100%;
+      touch-action: none;
+    }
   </style>
 
   <script>
@@ -185,6 +194,8 @@ const photos = (await getCollection("photography"))
       const closeLightbox = () => {
         lightbox?.classList.remove("is-open");
         lightbox?.setAttribute("aria-hidden", "true");
+        document.documentElement.classList.remove("lightbox-open");
+        document.body.classList.remove("lightbox-open");
         if (lightboxImage) {
           lightboxImage.src = "";
           lightboxImage.alt = "";
@@ -211,6 +222,8 @@ const photos = (await getCollection("photography"))
         currentIndex = index;
         lightbox?.classList.add("is-open");
         lightbox?.setAttribute("aria-hidden", "false");
+        document.documentElement.classList.add("lightbox-open");
+        document.body.classList.add("lightbox-open");
       };
 
       const step = (delta) => {

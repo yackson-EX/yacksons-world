@@ -329,12 +329,13 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
           flex-wrap: nowrap;
           gap: 10px 14px;
           overflow-x: auto;
+          overflow-y: visible;
           -webkit-overflow-scrolling: touch;
           scrollbar-width: auto;
           scrollbar-color: #ffffff #1a1a1a;
           padding-right: 10px;
           max-width: 100%;
-          padding-bottom: 6px;
+          padding-bottom: 11px;
         }
 
         .nav > * {
@@ -357,14 +358,21 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
         }
 
         .dropdown .menu {
-          position: static;
-          border: 0;
-          padding: 6px 0 0;
-          min-width: auto;
+          position: absolute;
+          top: 100%;
+          left: 0;
+          border: 1px solid rgba(255,255,255,0.25);
+          padding: 10px;
+          min-width: 160px;
+          z-index: 20;
         }
 
         .mobile-only { display: block; }
         .desktop-only { display: none; }
+
+        .dropdown.mobile-only {
+          position: relative;
+        }
 
         .main {
           gap: 20px;
