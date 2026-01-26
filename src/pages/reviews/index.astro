@@ -1,6 +1,8 @@
 ---
 import { getCollection, type CollectionEntry } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { formatListDate } from "../../lib/dates";
+import { normalizeMedium } from "../../lib/reviews";
 
 const posts = (await getCollection("reviews"))
   .sort((a: CollectionEntry<"reviews">, b: CollectionEntry<"reviews">) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
@@ -20,8 +22,11 @@ const label: Record<string, string> = {
   <ul>
     {posts.map((post: CollectionEntry<"reviews">) => (
       <li>
-        <a href={`/reviews/${post.data.medium}/${post.id}/`}>{post.data.title}</a>
-        <span> ({label[post.data.medium]})</span>
+        <a href={`/reviews/${normalizeMedium(post.data.medium)}/${post.id}/`}>{post.data.title}</a>
+        {" "}
+        <span>({label[post.data.medium] ?? "Review"})</span>
+        {" "}
+        <span class="list-date">{formatListDate(post.data.pubDate)}</span>
       </li>
     ))}
   </ul>

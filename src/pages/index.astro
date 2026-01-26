@@ -1,6 +1,8 @@
 ---
 import { getCollection, type CollectionEntry } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { formatListDate } from "../lib/dates";
+import { normalizeMedium } from "../lib/reviews";
 
 const blogPosts = await getCollection("blog");
 const reviewPosts = await getCollection("reviews");
@@ -14,7 +16,7 @@ const recent = [
   ...reviewPosts.map((post: CollectionEntry<"reviews">) => ({
     title: post.data.title,
     date: post.data.pubDate,
-    href: `/reviews/${post.data.medium}/${post.id}/`,
+    href: `/reviews/${normalizeMedium(post.data.medium)}/${post.id}/`,
     kind: "Review",
   })),
 ]
@@ -31,6 +33,8 @@ const recent = [
         <a href={post.href}>{post.title}</a>
         {" "}
         <span>({post.kind})</span>
+        {" "}
+        <span class="list-date">{formatListDate(post.date)}</span>
       </li>
     ))}
   </ul>

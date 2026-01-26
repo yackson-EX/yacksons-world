@@ -2,6 +2,7 @@
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import { normalizeMedium } from "../../../lib/reviews";
+import { formatFullDate } from "../../../lib/dates";
 
 export async function getStaticPaths() {
   const posts = await getCollection("reviews");
@@ -18,5 +19,6 @@ const { Content } = await render(post);
 <BaseLayout title={post.data.title}>
   <a href={`/reviews/${normalizeMedium(post.data.medium)}/`}>Back</a>
   <h1>{post.data.title}</h1>
+  <p class="post-date">{formatFullDate(post.data.pubDate)}</p>
   <Content />
 </BaseLayout>

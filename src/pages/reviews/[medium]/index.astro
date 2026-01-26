@@ -7,6 +7,7 @@ import {
   isReviewMedium,
   normalizeMedium,
 } from "../../../lib/reviews";
+import { formatListDate } from "../../../lib/dates";
 
 export async function getStaticPaths() {
   return REVIEW_MEDIA.map((medium) => ({ params: { medium } }));
@@ -29,6 +30,10 @@ const label = activeMedium ? REVIEW_MEDIA_LABELS[activeMedium] : normalizedMediu
     {posts.map((post: CollectionEntry<"reviews">) => (
       <li>
         <a href={`/reviews/${normalizeMedium(post.data.medium)}/${post.id}/`}>{post.data.title}</a>
+        {" "}
+        <span>(Review)</span>
+        {" "}
+        <span class="list-date">{formatListDate(post.data.pubDate)}</span>
       </li>
     ))}
   </ul>
