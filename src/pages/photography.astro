@@ -117,7 +117,7 @@ const photos = (await getCollection("photography"))
         inset 2px 2px 0 rgba(255, 255, 255, 0.08),
         inset -2px -2px 0 rgba(0, 0, 0, 0.6),
         0 0 0 2px rgba(255, 255, 255, 0.08);
-      padding: 18px 18px 14px;
+      padding: 23px 59px 19px;
     }
 
     .lightbox-image {
@@ -140,10 +140,12 @@ const photos = (await getCollection("photography"))
       top: 10px;
       right: 10px;
       border: 0;
-      background: #000;
-      color: #fff;
-      font-size: 16px;
-      padding: 4px 8px;
+      background: transparent url("/x-button.png") no-repeat center / contain;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      color: transparent;
+      font-size: 0;
       cursor: pointer;
     }
 
@@ -153,15 +155,17 @@ const photos = (await getCollection("photography"))
       top: 50%;
       transform: translateY(-50%);
       border: 0;
-      background: #000;
-      color: #fff;
-      font-size: 28px;
-      padding: 4px 10px;
+      background: transparent url("/arrow.png") no-repeat center / contain;
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      color: transparent;
+      font-size: 0;
       cursor: pointer;
     }
 
-    .lightbox-prev { left: 10px; }
-    .lightbox-next { right: 10px; }
+    .lightbox-prev { left: 6px; top: 50%; }
+    .lightbox-next { right: 6px; top: calc(50% - 15px); transform: translateY(-50%) scaleX(-1); }
   </style>
 
   <script>
