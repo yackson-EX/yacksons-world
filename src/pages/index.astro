@@ -2,8 +2,23 @@
 import { getCollection, type CollectionEntry } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const posts = (await getCollection("blog"))
-  .sort((a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+const blogPosts = await getCollection("blog");
+const reviewPosts = await getCollection("reviews");
+const recent = [
+  ...blogPosts.map((post: CollectionEntry<"blog">) => ({
+    title: post.data.title,
+    date: post.data.pubDate,
+    href: `/blog/${post.id}/`,
+    kind: "Blog",
+  })),
+  ...reviewPosts.map((post: CollectionEntry<"reviews">) => ({
+    title: post.data.title,
+    date: post.data.pubDate,
+    href: `/reviews/${post.data.medium}/${post.id}/`,
+    kind: "Review",
+  })),
+]
+  .sort((a, b) => b.date.valueOf() - a.date.valueOf())
   .slice(0, 10);
 ---
 
@@ -11,9 +26,11 @@ const posts = (await getCollection("blog"))
   <h1>Recent</h1>
 
   <ul>
-    {posts.map((post: CollectionEntry<"blog">) => (
+    {recent.map((post) => (
       <li>
-        <a href={`/blog/${post.id}/`}>{post.data.title}</a>
+        <a href={post.href}>{post.title}</a>
+        {" "}
+        <span>({post.kind})</span>
       </li>
     ))}
   </ul>
