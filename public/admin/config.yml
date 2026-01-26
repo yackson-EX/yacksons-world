@@ -7,6 +7,15 @@ media_folder: "public/uploads"
 public_folder: "/uploads"
 
 collections:
+  - name: "pages"
+    label: "Pages"
+    files:
+      - name: "about"
+        label: "About"
+        file: "src/content/pages/about.md"
+        fields:
+          - { name: "title", label: "Title", widget: "string" }
+          - { name: "body", label: "Body", widget: "markdown" }
   - name: "blog"
     label: "Blog"
     folder: "src/content/blog"

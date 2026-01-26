@@ -46,11 +46,32 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
     <style>
       :root { color-scheme: dark; }
 
-      body {
+      :global(:root),
+      :global(html),
+      :global(body) {
         margin: 0;
         background: #000;
         color: #fff;
         font-family: "EB Garamond", Garamond, "Times New Roman", serif;
+        cursor: url("/cursors/cursor1.cur"),
+          url("/cursors/cursor-fallback.png") 2 2,
+          url("/cursors/cursor.png") 2 2,
+          default;
+      }
+
+      :global(html) {
+        height: 100%;
+      }
+
+      :global(body) {
+        min-height: 100vh;
+      }
+
+      :global(*) {
+        cursor: url("/cursors/cursor1.cur"),
+          url("/cursors/cursor-fallback.png") 2 2,
+          url("/cursors/cursor.png") 2 2,
+          default;
       }
 
       :global(h1, h2, h3, h4, h5, h6, .nav, .tile-label) {
@@ -68,7 +89,19 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
       :global(.nav) { font-size: calc(1em + 6px); }
       :global(.tile-label) { font-size: calc(1em + 12px); }
 
-      a { color: inherit; }
+      :global(a) { color: inherit; }
+
+      :global(a),
+      :global(a img),
+      :global(button),
+      :global(summary),
+      .tile,
+      .menu a {
+        cursor: url("/cursors/cursor2.cur"),
+          url("/cursors/cursor-fallback.png") 2 2,
+          url("/cursors/cursor.png") 2 2,
+          pointer;
+      }
 
       :global(ul) {
         list-style: none;
@@ -99,6 +132,16 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
         align-items: center;
         justify-content: flex-start;
         gap: 24px;
+        padding: 12px;
+        background: #000;
+        border-top: 5px solid rgba(255, 255, 255, 0.35);
+        border-left: 5px solid rgba(255, 255, 255, 0.35);
+        border-right: 5px solid rgba(255, 255, 255, 0.12);
+        border-bottom: 5px solid rgba(255, 255, 255, 0.12);
+        box-shadow:
+          inset 2px 2px 0 rgba(255, 255, 255, 0.08),
+          inset -2px -2px 0 rgba(0, 0, 0, 0.6),
+          0 0 0 2px rgba(255, 255, 255, 0.08);
       }
 
       nav a {
@@ -161,6 +204,16 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
         gap: 24px;
         margin-top: 24px;
         align-items: start;
+        padding: 16px;
+        background: #000;
+        border-top: 5px solid rgba(255, 255, 255, 0.35);
+        border-left: 5px solid rgba(255, 255, 255, 0.35);
+        border-right: 5px solid rgba(255, 255, 255, 0.12);
+        border-bottom: 5px solid rgba(255, 255, 255, 0.12);
+        box-shadow:
+          inset 2px 2px 0 rgba(255, 255, 255, 0.08),
+          inset -2px -2px 0 rgba(0, 0, 0, 0.6),
+          0 0 0 2px rgba(255, 255, 255, 0.08);
       }
 
       /* Pixel-art helper */
@@ -183,6 +236,10 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
         text-decoration: none;
       }
 
+      .side a.tile {
+        margin-top: 30px;
+      }
+
       .side {
         display: flex;
         flex-direction: column;
@@ -192,9 +249,10 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
       .side-title {
         width: 384px;
         max-width: 100%;
-        margin-top: -85px;
+        margin-top: -110px;
         margin-bottom: 12px;
         margin-right: -40px;
+        transform: translate(-35px, -15px);
       }
 
       .side-title img {
@@ -279,6 +337,7 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
 
         .main {
           gap: 20px;
+          padding: 12px;
         }
 
         .side {
