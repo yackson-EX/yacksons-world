@@ -315,7 +315,7 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
           align-items: stretch;
           gap: 12px;
           padding: 16px;
-          overflow: hidden;
+          overflow: visible;
         }
 
         .header-top {
@@ -336,6 +336,11 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
           padding-right: 10px;
           max-width: 100%;
           padding-bottom: 11px;
+          position: relative;
+        }
+
+        .nav:has(details[open]) {
+          overflow: visible;
         }
 
         .nav > * {
@@ -364,7 +369,8 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
           border: 1px solid rgba(255,255,255,0.25);
           padding: 10px;
           min-width: 160px;
-          z-index: 20;
+          z-index: 50;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
         }
 
         .mobile-only { display: block; }
