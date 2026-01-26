@@ -7,4 +7,4 @@ My first review. This is a review of www.yacksons.world.
 
 0/10 No game yet.
 
-![Dang, dood...](/uploads/prinny-dead.jpg)
+![Dang, dood...](/uploads/imgbin_53c323100dd9a6cb740c1ab8f4d4255d.png)
