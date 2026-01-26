@@ -187,6 +187,16 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
       .mobile-only { display: none; }
       .desktop-only { display: block; }
 
+      .header-title {
+        display: none;
+      }
+
+      .header-title img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
       .dropdown:focus-within .menu,
       .dropdown[open] .menu {
         display: block;
@@ -291,7 +301,7 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
         .tile { width: 100%; }
       }
 
-      @media (max-width: 700px) {
+      @media (max-width: 700px), (max-height: 500px) and (orientation: landscape) {
         .wrap {
           padding: 40px 16px 20px;
         }
@@ -300,6 +310,7 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
           flex-direction: column;
           align-items: flex-start;
           gap: 12px;
+          padding: 16px;
         }
 
         .nav {
@@ -309,6 +320,7 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
           -webkit-overflow-scrolling: touch;
           scrollbar-width: auto;
           scrollbar-color: #ffffff #1a1a1a;
+          padding-right: 10px;
         }
 
         .nav > * {
@@ -350,9 +362,14 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
         }
 
         .side-title {
-          width: min(320px, 90vw);
-          margin-top: 0;
-          margin-right: 0;
+          display: none;
+        }
+
+        .header-title {
+          display: block;
+          width: min(360px, 90vw);
+          margin: 4px auto 0;
+          align-self: center;
         }
 
         .tile {
@@ -398,6 +415,10 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
           <a class="toplink" href="/chat/">Chat</a>
           <a class="toplink" href="/about/">About</a>
         </nav>
+
+        <div class="header-title mobile-only" aria-hidden="true">
+          <img src="/Yacksons-World-Title.png" alt="" />
+        </div>
 
       </header>
 
