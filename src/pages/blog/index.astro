@@ -1,18 +1,28 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
-const posts = (await getCollection("blog"))
-  .sort((a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+// Fetch blogs from backend API
+const BACKEND_URL = import.meta.env.PUBLIC_BACKEND_URL || 'http://localhost:3001';
+let posts = [];
+
+try {
+  const response = await fetch(`${BACKEND_URL}/api/blogs`);
+  if (response.ok) {
+    posts = await response.json();
+  }
+} catch (error) {
+  console.error('Failed to fetch blogs:', error);
+}
 ---
 
 <BaseLayout title="Blog">
   <h1>Blog</h1>
 
   <ul>
-    {posts.map((post: CollectionEntry<"blog">) => (
+    {posts.map((post: any) => (
       <li>
-        <a href={`/blog/${post.id}/`}>{post.data.title}</a>
+        <a href={`/blog/${post.slug}/`}>{post.title}</a>
+        {post.category && <span> - {post.category}</span>}
       </li>
     ))}
   </ul>
