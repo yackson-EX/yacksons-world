@@ -5,7 +5,7 @@ category: Blog
 ---
 Alright. Half of my laundry is done, the cats' litter boxes are clean, the website looks halfway competent, and I've just sat down at my computer with an ice cold pouch of PokéJuice. And now comes the question—what the hell is Yackson's World? Well, dear reader, I'll tell you exactly what it is. Yackson's World is a weekend project turned hyper-fixation, and when I emerged from my rumpus room at exactly 4:30 in the morning, the end result was, by no means intentionally, a modern day MySpace page (perhaps GeoCities is more accurate here). My friends would know how annoyingly fitting that is for me.
 
-![](/uploads/pokejuice.jpg "mmmm... PokéJuice... ( -_-)旦~")
+![]( "mmmm... PokéJuice... ( -_-)旦~")
 
 But to really answer the question, Yackson's World, to me, is a few different things. The first is in the title, for which I paid a whole *three dollars* to represent ever so playfully in the url. And do you know how many McDoubles can be had for that?  \[ not even one, dood... ( ;-;) ]  But the point is, Yackson's World intentionally serves as exactly that; a place on the web in which you can truly exist in the same world that Yackson does. Technology is incredible, indeed!
 
