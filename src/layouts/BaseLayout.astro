@@ -1239,6 +1239,7 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
 
         const storageKey = "yacksonDrawingData";
         const openKey = "yacksonDrawingOpen";
+        const resumeSeenKey = "yacksonDrawingResumeSeen";
 
         const setWarning = (message) => {
           if (!saveWarning) return;
@@ -1345,7 +1346,7 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
 
         trigger.addEventListener("mousedown", setActive);
         trigger.addEventListener("touchstart", setActive, { passive: true });
-        trigger.addEventListener("click", openOverlay);
+        // click handler is defined later to allow resume prompt
         closeBtn.addEventListener("click", closeOverlay);
         overlay.addEventListener("click", (event) => {
           if (event.target === overlay && window.matchMedia("(max-width: 700px)").matches) {
@@ -1422,6 +1423,7 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
           localStorage.removeItem(storageKey);
           localStorage.removeItem(openKey);
           closeResume();
+          openOverlay();
         });
 
         sendBtn.addEventListener("click", () => {
@@ -1444,9 +1446,14 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
           }
         });
 
-        if (localStorage.getItem(storageKey)) {
-          openResume();
-        }
+        trigger.addEventListener("click", () => {
+          if (localStorage.getItem(storageKey) && !sessionStorage.getItem(resumeSeenKey)) {
+            sessionStorage.setItem(resumeSeenKey, "true");
+            openResume();
+            return;
+          }
+          openOverlay();
+        });
       })();
     </script>
   </body>
