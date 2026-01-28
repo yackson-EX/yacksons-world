@@ -2,22 +2,33 @@
 import { getCollection, type CollectionEntry } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { formatListDate } from "../lib/dates";
-import { normalizeMedium } from "../lib/reviews";
+import { normalizeMedium, REVIEW_TAG_LABELS } from "../lib/reviews";
 
 const blogPosts = await getCollection("blog");
 const reviewPosts = await getCollection("reviews");
+const now = new Date();
+const showFuturePosts =
+  import.meta.env.DEV || import.meta.env.SHOW_FUTURE_POSTS === "true";
 const recent = [
-  ...blogPosts.map((post: CollectionEntry<"blog">) => ({
+  ...blogPosts
+    .filter(
+      (post) => showFuturePosts || post.data.pubDate.valueOf() <= now.valueOf()
+    )
+    .map((post: CollectionEntry<"blog">) => ({
     title: post.data.title,
     date: post.data.pubDate,
     href: `/blog/${post.id}/`,
     kind: "Blog",
   })),
-  ...reviewPosts.map((post: CollectionEntry<"reviews">) => ({
+  ...reviewPosts
+    .filter(
+      (post) => showFuturePosts || post.data.pubDate.valueOf() <= now.valueOf()
+    )
+    .map((post: CollectionEntry<"reviews">) => ({
     title: post.data.title,
     date: post.data.pubDate,
     href: `/reviews/${normalizeMedium(post.data.medium)}/${post.id}/`,
-    kind: "Review",
+    kind: REVIEW_TAG_LABELS[normalizeMedium(post.data.medium)] ?? post.data.medium,
   })),
 ]
   .sort((a, b) => b.date.valueOf() - a.date.valueOf())
@@ -31,8 +42,11 @@ const recent = [
     {recent.map((post) => (
       <li>
         <a href={post.href}>{post.title}</a>
+        {showFuturePosts && post.date.valueOf() > now.valueOf() && (
+          <span class="scheduled-badge">Scheduled</span>
+        )}
         {" "}
-        <span>({post.kind})</span>
+        <span class="list-category">[{post.kind}]</span>
         {" "}
         <span class="list-date">{formatListDate(post.date)}</span>
       </li>

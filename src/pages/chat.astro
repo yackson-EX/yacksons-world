@@ -4,5 +4,29 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 <BaseLayout title="Chat">
   <h1>Chat</h1>
-  <p>Coming soon.</p>
+  <p>Go ahead. Share your thoughts. Yackson won't judge them.</p>
+  <section class="comments chat-comments" aria-label="Chat">
+    <script
+      src="https://giscus.app/client.js"
+      data-repo="yackson-EX/yacksons-world"
+      data-repo-id="R_kgDORAkMlg"
+      data-category="Chat"
+      data-category-id="DIC_kwDORAkMls4C1hh7"
+      data-mapping="pathname"
+      data-strict="0"
+      data-reactions-enabled="0"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="fro"
+      data-lang="en"
+      crossorigin="anonymous"
+      async
+    ></script>
+  </section>
+
+  <style>
+    .chat-comments {
+      min-height: 60vh;
+    }
+  </style>
 </BaseLayout>

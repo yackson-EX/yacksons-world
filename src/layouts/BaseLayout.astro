@@ -65,6 +65,16 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
 
       :global(body) {
         min-height: 100vh;
+        background: transparent;
+      }
+
+      :global(#bg) {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
       }
 
       :global(*) {
@@ -96,6 +106,37 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
 
       :global(.list-date) {
         opacity: 0.5;
+      }
+
+      :global(.list-category) {
+        opacity: 0.5;
+      }
+
+      @media (max-width: 700px) {
+        :global(html.drawing-open),
+        :global(body.drawing-open) {
+          overflow: hidden;
+          height: 100%;
+          touch-action: none;
+        }
+      }
+
+      :global(.scheduled-badge) {
+        display: inline-block;
+        margin-left: 8px;
+        padding: 2px 6px;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        background: rgba(255, 255, 255, 0.08);
+        font-size: 0.8em;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        opacity: 0.7;
+      }
+
+      :global(.comments) {
+        margin-top: 28px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
       }
 
       :global(a) { color: inherit; }
@@ -271,7 +312,33 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
       .side {
         display: flex;
         flex-direction: column;
-        align-items: flex-end;
+        align-items: center;
+        padding-left: 20px;
+      }
+
+      .side > .drawing-trigger,
+      .side > .tile {
+        align-self: center;
+      }
+
+      .drawing-trigger {
+        align-self: flex-end;
+        margin: 46px 0 16px;
+        padding: 8px 12px;
+        background: #8a8a8a;
+        color: #000;
+        border: 2px solid #ea323c;
+        font-family: "EB Garamond", Garamond, "Times New Roman", serif;
+        font-size: 1em;
+        text-transform: none;
+        box-shadow:
+          inset 2px 2px 0 rgba(255, 255, 255, 0.25),
+          inset -2px -2px 0 rgba(0, 0, 0, 0.7);
+        transition: filter 150ms ease;
+      }
+
+      .drawing-trigger.is-active {
+        filter: brightness(0.75);
       }
 
       .side-title {
@@ -279,8 +346,9 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
         max-width: 100%;
         margin-top: -110px;
         margin-bottom: 12px;
-        margin-right: -40px;
-        transform: translate(-35px, -15px);
+        margin-right: 0;
+        transform: translate(-2px, -14px);
+        align-self: center;
       }
 
       .side-title img {
@@ -307,6 +375,357 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
         font-size: inherit;
         opacity: 0.9;
         text-align: center;
+      }
+
+      .feedback-boxes {
+        width: 200px;
+        max-width: 100%;
+        margin-top: 18px;
+        position: relative;
+        display: grid;
+        gap: 24px;
+      }
+
+      .feedback-box {
+        background: #000;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        padding: 8px;
+        box-shadow:
+          inset 1px 1px 0 rgba(255, 255, 255, 0.08),
+          inset -1px -1px 0 rgba(0, 0, 0, 0.6);
+      }
+
+      .feedback-box label {
+        display: block;
+        font-size: 0.9em;
+        margin-bottom: 6px;
+        opacity: 0.8;
+      }
+
+      .feedback-box input {
+        width: 100%;
+        background: #0a0a0a;
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 6px 8px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono",
+          "Courier New", monospace;
+        font-size: 0.85em;
+      }
+
+      .feedback-box input::placeholder {
+        opacity: 0.5;
+      }
+
+      .trash-wrap {
+        margin-top: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+        opacity: 0.8;
+        position: relative;
+      }
+
+      .trash-can {
+        width: 64px;
+        height: 54px;
+        position: relative;
+        border: 2px solid rgba(0, 0, 0, 0.45);
+        background: #cfcfcf;
+        box-shadow:
+          inset 0 -4px 0 rgba(0, 0, 0, 0.35),
+          inset 0 4px 0 rgba(255, 255, 255, 0.45);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.6em;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(0, 0, 0, 0.7);
+        clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 10% 100%);
+        transition: transform 120ms ease;
+      }
+
+      .trash-can::before {
+        content: "";
+        position: absolute;
+        top: -8px;
+        left: 6px;
+        right: 6px;
+        height: 8px;
+        border: 2px solid rgba(0, 0, 0, 0.45);
+        background: #d7d7d7;
+        transform-origin: left center;
+        transition: transform 160ms ease;
+      }
+
+      .trash-can::after {
+        content: "";
+        position: absolute;
+        top: -14px;
+        left: 24px;
+        width: 16px;
+        height: 6px;
+        border: 2px solid rgba(0, 0, 0, 0.45);
+        background: #d7d7d7;
+      }
+
+      .trash-can.is-open::before {
+        transform: translateY(-4px) rotate(-12deg);
+      }
+
+      .trash-can.is-hit {
+        animation: trash-shake 220ms ease;
+      }
+
+      @keyframes trash-shake {
+        0% { transform: translateX(0); }
+        30% { transform: translateX(-2px); }
+        60% { transform: translateX(2px); }
+        100% { transform: translateX(0); }
+      }
+
+      :global(.fly-chip) {
+        position: absolute;
+        padding: 4px 6px;
+        background: #f2e7cf;
+        border: 1px solid rgba(0, 0, 0, 0.35);
+        color: #1a1a1a;
+        font-size: 0.75em;
+        white-space: nowrap;
+        pointer-events: none;
+        z-index: 5;
+      }
+
+
+      .popup {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 200;
+      }
+
+      .popup.is-open {
+        display: flex;
+      }
+
+      .popup-panel {
+        background: #000;
+        border: 3px solid rgba(255, 255, 255, 0.35);
+        padding: 16px 20px;
+        box-shadow:
+          inset 2px 2px 0 rgba(255, 255, 255, 0.08),
+          inset -2px -2px 0 rgba(0, 0, 0, 0.6),
+          0 0 0 2px rgba(255, 255, 255, 0.08);
+        text-align: center;
+        min-width: min(320px, 80vw);
+      }
+
+      .popup-panel button {
+        margin-top: 12px;
+        background: #111;
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        padding: 6px 12px;
+        font-family: inherit;
+        font-size: 0.9em;
+      }
+
+      @media (max-width: 800px) {
+        .feedback-boxes {
+          width: min(260px, 80vw);
+        }
+      }
+
+      @media (max-width: 800px) {
+        .side {
+          padding-left: 0;
+        }
+      }
+
+      .drawing-overlay {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        z-index: 220;
+        pointer-events: none;
+      }
+
+      .drawing-overlay.is-open {
+        display: flex;
+      }
+
+      .drawing-window {
+        width: 512px;
+        height: 384px;
+        background: #111;
+        border: 3px solid rgba(255, 255, 255, 0.35);
+        box-shadow:
+          inset 2px 2px 0 rgba(255, 255, 255, 0.08),
+          inset -2px -2px 0 rgba(0, 0, 0, 0.6),
+          0 0 0 2px rgba(255, 255, 255, 0.08);
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        pointer-events: auto;
+      }
+
+      .drawing-titlebar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 6px 8px;
+        background: #000;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        cursor: move;
+        user-select: none;
+      }
+
+      .drawing-title {
+        font-size: 0.95em;
+        opacity: 0.85;
+      }
+
+      .drawing-close {
+        border: 0;
+        background: transparent url("/x-button.png") no-repeat center / contain;
+        width: 18px;
+        height: 18px;
+        padding: 0;
+        color: transparent;
+        font-size: 0;
+        cursor: pointer;
+      }
+
+      .drawing-canvas {
+        flex: 1;
+        background: #fff;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 4 / 3;
+        display: block;
+        touch-action: none;
+      }
+
+      .drawing-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        padding: 8px;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        background: #000;
+      }
+
+      .drawing-actions button {
+        background: #111;
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        padding: 6px 10px;
+        font-family: inherit;
+        font-size: 0.9em;
+      }
+
+      .drawing-save-warning {
+        margin-top: 6px;
+        font-size: 0.8em;
+        opacity: 0.75;
+      }
+
+      .drawing-modal {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 230;
+      }
+
+      .drawing-modal.is-open {
+        display: flex;
+      }
+
+      .drawing-modal-panel {
+        background: #000;
+        border: 3px solid rgba(255, 255, 255, 0.35);
+        padding: 34px 20px 22px;
+        box-shadow:
+          inset 2px 2px 0 rgba(255, 255, 255, 0.08),
+          inset -2px -2px 0 rgba(0, 0, 0, 0.6),
+          0 0 0 2px rgba(255, 255, 255, 0.08);
+        text-align: center;
+        min-width: min(340px, 80vw);
+        position: relative;
+        line-height: 1.5;
+      }
+
+      .drawing-modal-close {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        border: 0;
+        background: transparent url("/x-button.png") no-repeat center / contain;
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        color: transparent;
+        font-size: 0;
+        cursor: pointer;
+      }
+
+      .resume-modal-panel {
+        background: #000;
+        border: 3px solid rgba(255, 255, 255, 0.35);
+        padding: 26px 20px 18px;
+        box-shadow:
+          inset 2px 2px 0 rgba(255, 255, 255, 0.08),
+          inset -2px -2px 0 rgba(0, 0, 0, 0.6),
+          0 0 0 2px rgba(255, 255, 255, 0.08);
+        text-align: center;
+        min-width: min(320px, 80vw);
+        position: relative;
+        line-height: 1.5;
+      }
+
+      .resume-actions {
+        margin-top: 12px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .resume-actions button {
+        background: #111;
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        padding: 6px 12px;
+        font-family: inherit;
+        font-size: 0.9em;
+      }
+
+      @media (max-width: 700px) {
+        .drawing-window {
+          width: 100%;
+          height: 100%;
+          inset: 0;
+          position: fixed;
+          border-width: 2px;
+        }
+
+        .drawing-titlebar {
+          cursor: default;
+        }
+
+        .drawing-overlay {
+          pointer-events: auto;
+        }
       }
 
       @media (max-width: 800px) {
@@ -420,6 +839,7 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
   </head>
 
   <body>
+    <canvas id="bg" aria-hidden="true"></canvas>
     <div class="wrap">
       <header>
         <div class="header-top">
@@ -427,9 +847,9 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
             <img class="logo pixel" src="/Yacksons-World-Logo.gif" alt="" />
           </a>
 
-          <div class="header-title mobile-only" aria-hidden="true">
-            <img src="/Yacksons-World-Title.png" alt="" />
-          </div>
+        <div class="header-title mobile-only" aria-hidden="true">
+          <img src="/Yacksons-World-Title.png" alt="" />
+        </div>
         </div>
 
         <nav class="nav">
@@ -456,6 +876,7 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
           <a class="toplink" href="/photography/">Photography</a>
           <a class="toplink" href="/chat/">Chat</a>
           <a class="toplink" href="/about/">About</a>
+          <a class="toplink" href="/faq/">F.A.Q.</a>
         </nav>
 
       </header>
@@ -469,14 +890,564 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
           <div class="side-title" aria-hidden="true">
             <img src="/Yacksons-World-Title.png" alt="" />
           </div>
+          <button class="drawing-trigger" type="button">Make Yackson a Drawing!</button>
           {sidebarTiles.map((tile) => (
             <a class="tile" href={tile.href} target="_blank" rel="noopener">
               <img src={tile.img} alt={tile.alt} />
               <div class="tile-label">{tile.label}</div>
             </a>
           ))}
+          <div class="feedback-boxes" aria-label="Feedback boxes">
+            <div class="feedback-box">
+              <label for="suggestion-input">Suggestion box</label>
+              <input
+                id="suggestion-input"
+                type="text"
+                placeholder="Type here..."
+                autocomplete="off"
+              />
+            </div>
+            <div class="feedback-box">
+              <label for="complaint-input">Complaint box</label>
+              <input
+                id="complaint-input"
+                type="text"
+                placeholder="Type here..."
+                autocomplete="off"
+              />
+            </div>
+            <div class="trash-wrap">
+              <div class="trash-can" aria-hidden="true">
+                <span class="trash-text">Trash</span>
+              </div>
+            </div>
+          </div>
         </aside>
       </div>
     </div>
+
+    <div class="popup" id="feedback-popup" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="popup-panel">
+        <div id="feedback-message">Yackson definitely received your message.</div>
+        <button type="button" id="feedback-ok">ok...</button>
+      </div>
+    </div>
+
+    <div class="drawing-overlay" id="drawing-overlay" aria-hidden="true">
+      <div class="drawing-window" id="drawing-window" role="dialog" aria-modal="true">
+        <div class="drawing-titlebar" id="drawing-titlebar">
+          <div class="drawing-title">Make Yackson a Drawing!</div>
+          <button class="drawing-close" type="button" id="drawing-close">Close</button>
+        </div>
+        <canvas id="drawing-canvas" class="drawing-canvas" width="512" height="384"></canvas>
+        <div class="drawing-actions">
+          <button type="button" id="drawing-clear">Clear</button>
+          <button type="button" id="drawing-send">Send to Yackson</button>
+        </div>
+        <div class="drawing-save-warning" id="drawing-save-warning" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <div class="drawing-modal" id="drawing-modal" aria-hidden="true">
+      <div class="drawing-modal-panel">
+        <button class="drawing-modal-close" type="button" id="drawing-modal-close">Close</button>
+        <div>A masterpiece! Please send to reachme@yacksons.world</div>
+        <div>Best drawings will become featured on Yackson's world.</div>
+        <div>(automagic send feature coming soon)</div>
+      </div>
+    </div>
+
+    <div class="drawing-modal" id="resume-modal" aria-hidden="true">
+      <div class="resume-modal-panel">
+        <div>Resume your saved drawing?</div>
+        <div class="resume-actions">
+          <button type="button" id="resume-no">nope</button>
+          <button type="button" id="resume-yes">yup</button>
+        </div>
+      </div>
+    </div>
+
+    <script is:inline>
+      (() => {
+        const canvas = document.getElementById("bg");
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+
+        const settings = {
+          fontSize: 14,
+          lineHeight: 16,
+          charset:
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>/?~",
+          hiddenWords: ["_eort_", "_Anghkooey_", "_Bah_"],
+          hiddenRepeats: 20,
+          hiddenRepeatMap: { _eort_: 150, _Anghkooey_: 80, _Bah_: 60 },
+          minAlpha: 0.14,
+          maxAlpha: 0.46,
+          kx: 0.12,
+          ky: 0.09,
+          phase: 0.0,
+          vignetteStrength: 0.55,
+          color: [90, 90, 90],
+          fontFamily:
+            "ui-monospace, SFMono-Regular, Menlo, Consolas, Liberation Mono, Courier New, monospace",
+        };
+
+        const draw = () => {
+          const dpr = window.devicePixelRatio || 1;
+          const width = window.innerWidth;
+          const height = window.innerHeight;
+
+          canvas.width = Math.ceil(width * dpr);
+          canvas.height = Math.ceil(height * dpr);
+          canvas.style.width = `${width}px`;
+          canvas.style.height = `${height}px`;
+
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          ctx.clearRect(0, 0, width, height);
+          ctx.textBaseline = "top";
+          ctx.textAlign = "left";
+          ctx.font = `${settings.fontSize}px ${settings.fontFamily}`;
+          ctx.fillStyle = `rgb(${settings.color[0]}, ${settings.color[1]}, ${settings.color[2]})`;
+
+          const charWidth = Math.max(1, ctx.measureText("M").width);
+          const cols = Math.ceil(width / charWidth);
+          const rows = Math.ceil(height / settings.lineHeight);
+          const alphaRange = settings.maxAlpha - settings.minAlpha;
+          const invMaxDist = 1 / Math.SQRT2;
+
+          const grid = Array.from({ length: rows }, () =>
+            Array.from({ length: cols }, () =>
+              settings.charset[(Math.random() * settings.charset.length) | 0]
+            )
+          );
+
+          const occupied = new Set();
+          const keyFor = (row, col) => `${row}:${col}`;
+
+          const placeWord = (word) => {
+            if (word.length >= cols) return false;
+            const maxAttempts = rows * 4;
+
+            for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+              const row = (Math.random() * rows) | 0;
+              const col = (Math.random() * (cols - word.length)) | 0;
+              let blocked = false;
+
+              for (let i = 0; i < word.length; i += 1) {
+                if (occupied.has(keyFor(row, col + i))) {
+                  blocked = true;
+                  break;
+                }
+              }
+
+              if (blocked) continue;
+
+              for (let i = 0; i < word.length; i += 1) {
+                const targetCol = col + i;
+                grid[row][targetCol] = word[i];
+                occupied.add(keyFor(row, targetCol));
+              }
+
+              return true;
+            }
+
+            return false;
+          };
+
+          for (const word of settings.hiddenWords) {
+            const count = settings.hiddenRepeatMap?.[word] ?? settings.hiddenRepeats;
+            for (let i = 0; i < count; i += 1) {
+              placeWord(word);
+            }
+          }
+
+          for (let row = 0; row < rows; row += 1) {
+            const y = row * settings.lineHeight;
+            const ny = (row + 0.5) / rows - 0.5;
+
+            for (let col = 0; col < cols; col += 1) {
+              const x = col * charWidth;
+              const nx = (col + 0.5) / cols - 0.5;
+              const dist = Math.min(1, Math.hypot(nx, ny) * invMaxDist);
+              const wave = Math.sin(settings.kx * col + settings.ky * row + settings.phase);
+              const waveAlpha = settings.minAlpha + (wave + 1) * 0.5 * alphaRange;
+              const vignette = 1 + dist * settings.vignetteStrength;
+              const alpha = Math.min(1, waveAlpha * vignette);
+              const ch = grid[row][col];
+
+              ctx.globalAlpha = alpha;
+              ctx.fillText(ch, x, y);
+            }
+          }
+
+          ctx.globalAlpha = 1;
+        };
+
+        let rafId = 0;
+        const schedule = () => {
+          if (rafId) cancelAnimationFrame(rafId);
+          rafId = requestAnimationFrame(draw);
+        };
+
+        draw();
+        window.addEventListener("resize", schedule, { passive: true });
+      })();
+    </script>
+    <script is:inline>
+      (() => {
+        const feedbackWrap = document.querySelector(".feedback-boxes");
+        if (!feedbackWrap) return;
+
+        const trash = feedbackWrap.querySelector(".trash-can");
+        const trashText = feedbackWrap.querySelector(".trash-text");
+        const popup = document.getElementById("feedback-popup");
+        const popupMessage = document.getElementById("feedback-message");
+        const popupOk = document.getElementById("feedback-ok");
+        const openPopup = (text) => {
+          if (!popup || !popupMessage) return;
+          popupMessage.textContent = text;
+          popup.classList.add("is-open");
+          popup.setAttribute("aria-hidden", "false");
+        };
+
+        const closePopup = () => {
+          if (!popup) return;
+          popup.classList.remove("is-open");
+          popup.setAttribute("aria-hidden", "true");
+        };
+
+        popupOk?.addEventListener("click", closePopup);
+        popup?.addEventListener("click", (event) => {
+          if (event.target === popup) closePopup();
+        });
+
+        const launchChip = (input, label) => {
+          const value = input.value.trim();
+          if (!value || !trash) return;
+          const animationDuration = 1200;
+          const popupDelay = animationDuration + 500;
+          const chip = document.createElement("span");
+          chip.className = "fly-chip";
+          chip.textContent = value;
+          feedbackWrap.appendChild(chip);
+
+          const wrapRect = feedbackWrap.getBoundingClientRect();
+          const inputRect = input.getBoundingClientRect();
+          const trashRect = (trashText ?? trash).getBoundingClientRect();
+          const chipRect = chip.getBoundingClientRect();
+
+          const startX =
+            inputRect.left - wrapRect.left + inputRect.width / 2 - chipRect.width / 2;
+          const startY = inputRect.top - wrapRect.top + inputRect.height / 2 - 8;
+          const endX =
+            trashRect.left - wrapRect.left + trashRect.width / 2 - chipRect.width / 2;
+          const endY = trashRect.top - wrapRect.top + 2;
+          const impactY = endY + 10;
+          const deltaX = endX - startX;
+          const deltaY = endY - startY;
+          const deltaImpactY = impactY - startY;
+
+          chip.style.left = `${startX}px`;
+          chip.style.top = `${startY}px`;
+
+          const chipAnim = chip.animate(
+            [
+              { transform: "translate(0, 0) scale(1)", opacity: 1, offset: 0 },
+              { transform: `translate(${deltaX}px, ${deltaY}px) scale(0.7)`, opacity: 0.9, offset: 0.82 },
+              { transform: `translate(${deltaX}px, ${deltaImpactY}px) scale(0.2)`, opacity: 0.0, offset: 1 },
+            ],
+            { duration: animationDuration, easing: "cubic-bezier(0.2, 0.7, 0.2, 1)" }
+          );
+          chipAnim.onfinish = () => chip.remove();
+
+          if (trash instanceof HTMLElement) {
+            window.setTimeout(() => trash.classList.add("is-open"), animationDuration * 0.05);
+            window.setTimeout(() => trash.classList.remove("is-open"), animationDuration * 0.55);
+            window.setTimeout(() => {
+              trash.classList.add("is-hit");
+              window.setTimeout(() => trash.classList.remove("is-hit"), 260);
+            }, animationDuration * 0.4);
+          }
+
+          input.value = "";
+          window.setTimeout(() => {
+            openPopup(`Yackson definitely received your ${label}.`);
+          }, popupDelay);
+        };
+
+        const handleKey = (label) => (event) => {
+          if (event.key !== "Enter") return;
+          event.preventDefault();
+          launchChip(event.currentTarget, label);
+        };
+
+        const suggestionInput = document.getElementById("suggestion-input");
+        const complaintInput = document.getElementById("complaint-input");
+
+        suggestionInput?.addEventListener("keydown", handleKey("suggestion"));
+        complaintInput?.addEventListener("keydown", handleKey("complaint"));
+      })();
+    </script>
+    <script is:inline>
+      (() => {
+        const trigger = document.querySelector(".drawing-trigger");
+        const overlay = document.getElementById("drawing-overlay");
+        const windowEl = document.getElementById("drawing-window");
+        const titlebar = document.getElementById("drawing-titlebar");
+        const closeBtn = document.getElementById("drawing-close");
+        const canvas = document.getElementById("drawing-canvas");
+        const clearBtn = document.getElementById("drawing-clear");
+        const sendBtn = document.getElementById("drawing-send");
+        const saveWarning = document.getElementById("drawing-save-warning");
+        const modal = document.getElementById("drawing-modal");
+        const modalClose = document.getElementById("drawing-modal-close");
+        const resumeModal = document.getElementById("resume-modal");
+        const resumeYes = document.getElementById("resume-yes");
+        const resumeNo = document.getElementById("resume-no");
+
+        if (
+          !trigger ||
+          !overlay ||
+          !windowEl ||
+          !titlebar ||
+          !closeBtn ||
+          !canvas ||
+          !clearBtn ||
+          !sendBtn ||
+          !modal ||
+          !modalClose ||
+          !resumeModal ||
+          !resumeYes ||
+          !resumeNo
+        ) {
+          return;
+        }
+
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = 3;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+
+        let drawing = false;
+        let lastX = 0;
+        let lastY = 0;
+
+        const storageKey = "yacksonDrawingData";
+        const openKey = "yacksonDrawingOpen";
+
+        const setWarning = (message) => {
+          if (!saveWarning) return;
+          saveWarning.textContent = message;
+        };
+
+        const saveDrawing = () => {
+          try {
+            const dataUrl = canvas.toDataURL("image/png");
+            localStorage.setItem(storageKey, dataUrl);
+            localStorage.setItem(openKey, "true");
+            setWarning("");
+          } catch (error) {
+            setWarning("Drawing too large to save locally. Better hit send!");
+          }
+        };
+
+        const loadDrawing = () => {
+          const dataUrl = localStorage.getItem(storageKey);
+          if (!dataUrl) return;
+          const image = new Image();
+          image.onload = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+          };
+          image.src = dataUrl;
+        };
+
+        const getPos = (event) => {
+          const rect = canvas.getBoundingClientRect();
+          const clientX = "touches" in event ? event.touches[0].clientX : event.clientX;
+          const clientY = "touches" in event ? event.touches[0].clientY : event.clientY;
+          const x = ((clientX - rect.left) / rect.width) * canvas.width;
+          const y = ((clientY - rect.top) / rect.height) * canvas.height;
+          return { x, y };
+        };
+
+        const startDraw = (event) => {
+          if ("touches" in event) {
+            event.preventDefault();
+          }
+          drawing = true;
+          const pos = getPos(event);
+          lastX = pos.x;
+          lastY = pos.y;
+        };
+
+        const moveDraw = (event) => {
+          if (!drawing) return;
+          if ("touches" in event) {
+            event.preventDefault();
+          }
+          const pos = getPos(event);
+          ctx.beginPath();
+          ctx.moveTo(lastX, lastY);
+          ctx.lineTo(pos.x, pos.y);
+          ctx.stroke();
+          lastX = pos.x;
+          lastY = pos.y;
+        };
+
+        const endDraw = () => {
+          drawing = false;
+          saveDrawing();
+        };
+
+        canvas.addEventListener("mousedown", startDraw);
+        canvas.addEventListener("mousemove", moveDraw);
+        window.addEventListener("mouseup", endDraw);
+        canvas.addEventListener("touchstart", startDraw, { passive: false });
+        canvas.addEventListener("touchmove", moveDraw, { passive: false });
+        canvas.addEventListener("touchend", endDraw);
+
+        const centerWindow = () => {
+          const w = windowEl.offsetWidth;
+          const h = windowEl.offsetHeight;
+          windowEl.style.left = `${(window.innerWidth - w) / 2}px`;
+          windowEl.style.top = `${(window.innerHeight - h) / 2}px`;
+        };
+
+        const openOverlay = () => {
+          overlay.classList.add("is-open");
+          overlay.setAttribute("aria-hidden", "false");
+          centerWindow();
+          if (window.matchMedia("(max-width: 700px)").matches) {
+            document.documentElement.classList.add("drawing-open");
+            document.body.classList.add("drawing-open");
+          }
+          localStorage.setItem(openKey, "true");
+        };
+
+        const closeOverlay = () => {
+          overlay.classList.remove("is-open");
+          overlay.setAttribute("aria-hidden", "true");
+          document.documentElement.classList.remove("drawing-open");
+          document.body.classList.remove("drawing-open");
+          localStorage.removeItem(openKey);
+        };
+
+        const setActive = () => {
+          trigger.classList.add("is-active");
+          window.setTimeout(() => trigger.classList.remove("is-active"), 180);
+        };
+
+        trigger.addEventListener("mousedown", setActive);
+        trigger.addEventListener("touchstart", setActive, { passive: true });
+        trigger.addEventListener("click", openOverlay);
+        closeBtn.addEventListener("click", closeOverlay);
+        overlay.addEventListener("click", (event) => {
+          if (event.target === overlay && window.matchMedia("(max-width: 700px)").matches) {
+            closeOverlay();
+          }
+        });
+
+        let dragActive = false;
+        let dragOffsetX = 0;
+        let dragOffsetY = 0;
+
+        const startDrag = (event) => {
+          if (window.matchMedia("(max-width: 700px)").matches) return;
+          dragActive = true;
+          const rect = windowEl.getBoundingClientRect();
+          dragOffsetX = event.clientX - rect.left;
+          dragOffsetY = event.clientY - rect.top;
+        };
+
+        const moveDrag = (event) => {
+          if (!dragActive) return;
+          windowEl.style.left = `${event.clientX - dragOffsetX}px`;
+          windowEl.style.top = `${event.clientY - dragOffsetY}px`;
+        };
+
+        const endDrag = () => {
+          dragActive = false;
+        };
+
+        titlebar.addEventListener("mousedown", startDrag);
+        window.addEventListener("mousemove", moveDrag);
+        window.addEventListener("mouseup", endDrag);
+
+        clearBtn.addEventListener("click", () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          localStorage.removeItem(storageKey);
+          setWarning("");
+        });
+
+        const openModal = () => {
+          modal.classList.add("is-open");
+          modal.setAttribute("aria-hidden", "false");
+        };
+
+        const closeModal = () => {
+          modal.classList.remove("is-open");
+          modal.setAttribute("aria-hidden", "true");
+        };
+
+        modalClose.addEventListener("click", closeModal);
+        modal.addEventListener("click", (event) => {
+          if (event.target === modal) closeModal();
+        });
+
+        const openResume = () => {
+          resumeModal.classList.add("is-open");
+          resumeModal.setAttribute("aria-hidden", "false");
+        };
+
+        const closeResume = () => {
+          resumeModal.classList.remove("is-open");
+          resumeModal.setAttribute("aria-hidden", "true");
+        };
+
+        resumeYes.addEventListener("click", () => {
+          closeResume();
+          openOverlay();
+          loadDrawing();
+        });
+
+        resumeNo.addEventListener("click", () => {
+          localStorage.removeItem(storageKey);
+          localStorage.removeItem(openKey);
+          closeResume();
+        });
+
+        sendBtn.addEventListener("click", () => {
+          canvas.toBlob((blob) => {
+            if (!blob) return;
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "yackson's-drawing.png";
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            URL.revokeObjectURL(link.href);
+            openModal();
+          });
+        });
+
+        window.addEventListener("beforeunload", () => {
+          if (!overlay.classList.contains("is-open")) {
+            localStorage.removeItem(openKey);
+          }
+        });
+
+        if (localStorage.getItem(storageKey)) {
+          openResume();
+        }
+      })();
+    </script>
   </body>
 </html>

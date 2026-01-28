@@ -5,19 +5,82 @@ import { formatFullDate } from "../../lib/dates";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
-  return posts.map((post) => ({
-    params: { slug: post.id },
-    props: { post },
-  }));
+  const now = new Date();
+  const showFuturePosts =
+    import.meta.env.DEV || import.meta.env.SHOW_FUTURE_POSTS === "true";
+  return posts
+    .filter(
+      (post) => showFuturePosts || post.data.pubDate.valueOf() <= now.valueOf()
+    )
+    .map((post) => ({
+      params: { slug: post.id },
+      props: { post },
+    }));
 }
 
 const { post } = Astro.props as { post: CollectionEntry<"blog"> };
+const now = new Date();
+const showFuturePosts =
+  import.meta.env.DEV || import.meta.env.SHOW_FUTURE_POSTS === "true";
 const { Content } = await render(post);
 ---
 
 <BaseLayout title={post.data.title}>
   <a href="/blog/">Back</a>
   <h1>{post.data.title}</h1>
-  <p class="post-date">{formatFullDate(post.data.pubDate)}</p>
-  <Content />
+  <p class="post-date">
+    {formatFullDate(post.data.pubDate)}
+    {showFuturePosts && post.data.pubDate.valueOf() > now.valueOf() && (
+      <span class="scheduled-badge">Scheduled</span>
+    )}
+  </p>
+  <div
+    class:list={[
+      "post-content",
+      post.data.imageAlign === "left" && "images-left",
+      post.data.imageAlign === "right" && "images-right",
+    ]}
+  >
+    <Content />
+  </div>
+  <section class="comments" aria-label="Comments">
+    <script
+      src="https://giscus.app/client.js"
+      data-repo="yackson-EX/yacksons-world"
+      data-repo-id="R_kgDORAkMlg"
+      data-category="Comments"
+      data-category-id="DIC_kwDORAkMls4C1hiM"
+      data-mapping="pathname"
+      data-strict="0"
+      data-reactions-enabled="0"
+      data-emit-metadata="0"
+      data-input-position="top"
+      data-theme="fro"
+      data-lang="en"
+      crossorigin="anonymous"
+      async
+    ></script>
+  </section>
+
+  <style>
+    .post-content :global(img) {
+      display: block;
+      margin: 0 auto;
+      max-width: 200px;
+      max-height: 200px;
+      width: auto;
+      height: auto;
+    }
+
+    .post-content.images-left :global(img) {
+      margin-left: 0;
+      margin-right: auto;
+    }
+
+    .post-content.images-right :global(img) {
+      margin-left: auto;
+      margin-right: 0;
+    }
+
+  </style>
 </BaseLayout>

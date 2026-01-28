@@ -9,6 +9,7 @@ const blog = defineCollection({
     title: z.string(),
     pubDate: z.coerce.date(),
     category: z.string().optional(),
+    imageAlign: z.enum(["left", "center", "right"]).optional(),
   }),
 });
 

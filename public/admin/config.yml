@@ -16,6 +16,12 @@ collections:
         fields:
           - { name: "title", label: "Title", widget: "string" }
           - { name: "body", label: "Body", widget: "markdown" }
+      - name: "faq"
+        label: "F.A.Q."
+        file: "src/content/pages/faq.md"
+        fields:
+          - { name: "title", label: "Title", widget: "string" }
+          - { name: "body", label: "Body", widget: "markdown" }
   - name: "blog"
     label: "Blog"
     folder: "src/content/blog"
@@ -25,6 +31,14 @@ collections:
       - { name: "title", label: "Title", widget: "string" }
       - { name: "pubDate", label: "Publish date", widget: "datetime" }
       - { name: "category", label: "Category", widget: "string" }
+      - name: "imageAlign"
+        label: "Image alignment"
+        widget: "select"
+        required: false
+        options:
+          - { label: "Center", value: "center" }
+          - { label: "Left", value: "left" }
+          - { label: "Right", value: "right" }
       - { name: "body", label: "Body", widget: "markdown" }
   - name: "reviews"
     label: "Reviews"

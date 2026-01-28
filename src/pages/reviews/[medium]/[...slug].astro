@@ -6,19 +6,52 @@ import { formatFullDate } from "../../../lib/dates";
 
 export async function getStaticPaths() {
   const posts = await getCollection("reviews");
-  return posts.map((post) => ({
-    params: { medium: normalizeMedium(post.data.medium), slug: post.id },
-    props: { post },
-  }));
+  const now = new Date();
+  const showFuturePosts =
+    import.meta.env.DEV || import.meta.env.SHOW_FUTURE_POSTS === "true";
+  return posts
+    .filter(
+      (post) => showFuturePosts || post.data.pubDate.valueOf() <= now.valueOf()
+    )
+    .map((post) => ({
+      params: { medium: normalizeMedium(post.data.medium), slug: post.id },
+      props: { post },
+    }));
 }
 
 const { post } = Astro.props as { post: CollectionEntry<"reviews"> };
+const now = new Date();
+const showFuturePosts =
+  import.meta.env.DEV || import.meta.env.SHOW_FUTURE_POSTS === "true";
 const { Content } = await render(post);
 ---
 
 <BaseLayout title={post.data.title}>
   <a href={`/reviews/${normalizeMedium(post.data.medium)}/`}>Back</a>
   <h1>{post.data.title}</h1>
-  <p class="post-date">{formatFullDate(post.data.pubDate)}</p>
+  <p class="post-date">
+    {formatFullDate(post.data.pubDate)}
+    {showFuturePosts && post.data.pubDate.valueOf() > now.valueOf() && (
+      <span class="scheduled-badge">Scheduled</span>
+    )}
+  </p>
   <Content />
+  <section class="comments" aria-label="Comments">
+    <script
+      src="https://giscus.app/client.js"
+      data-repo="yackson-EX/yacksons-world"
+      data-repo-id="R_kgDORAkMlg"
+      data-category="Comments"
+      data-category-id="DIC_kwDORAkMls4C1hiM"
+      data-mapping="pathname"
+      data-strict="0"
+      data-reactions-enabled="0"
+      data-emit-metadata="0"
+      data-input-position="top"
+      data-theme="fro"
+      data-lang="en"
+      crossorigin="anonymous"
+      async
+    ></script>
+  </section>
 </BaseLayout>

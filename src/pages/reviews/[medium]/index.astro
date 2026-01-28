@@ -4,6 +4,7 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 import {
   REVIEW_MEDIA,
   REVIEW_MEDIA_LABELS,
+  REVIEW_TAG_LABELS,
   isReviewMedium,
   normalizeMedium,
 } from "../../../lib/reviews";
@@ -17,8 +18,14 @@ const rawMedium = Astro.params.medium ?? "";
 const normalizedMedium = normalizeMedium(rawMedium);
 const activeMedium = isReviewMedium(normalizedMedium) ? normalizedMedium : null;
 
+const now = new Date();
+const showFuturePosts =
+  import.meta.env.DEV || import.meta.env.SHOW_FUTURE_POSTS === "true";
 const posts = (await getCollection("reviews"))
   .filter((p) => normalizeMedium(p.data.medium) === normalizedMedium)
+  .filter(
+    (post) => showFuturePosts || post.data.pubDate.valueOf() <= now.valueOf()
+  )
   .sort((a: CollectionEntry<"reviews">, b: CollectionEntry<"reviews">) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const label = activeMedium ? REVIEW_MEDIA_LABELS[activeMedium] : normalizedMedium;
@@ -30,8 +37,11 @@ const label = activeMedium ? REVIEW_MEDIA_LABELS[activeMedium] : normalizedMediu
     {posts.map((post: CollectionEntry<"reviews">) => (
       <li>
         <a href={`/reviews/${normalizeMedium(post.data.medium)}/${post.id}/`}>{post.data.title}</a>
+        {showFuturePosts && post.data.pubDate.valueOf() > now.valueOf() && (
+          <span class="scheduled-badge">Scheduled</span>
+        )}
         {" "}
-        <span>(Review)</span>
+        <span class="list-category">[{REVIEW_TAG_LABELS[normalizeMedium(post.data.medium)] ?? post.data.medium}]</span>
         {" "}
         <span class="list-date">{formatListDate(post.data.pubDate)}</span>
       </li>

@@ -16,6 +16,14 @@ export const REVIEW_MEDIA_LABELS: Record<ReviewMedium, string> = {
   anime: "Anime",
 };
 
+export const REVIEW_TAG_LABELS: Record<ReviewMedium, string> = {
+  games: "Game Review",
+  music: "Music Review",
+  movies: "Movie Review",
+  "tv-shows": "Series Review",
+  anime: "Anime Review",
+};
+
 const slugify = (value: string) => {
   const cleaned = value
     .trim()

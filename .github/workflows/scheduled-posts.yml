@@ -1,0 +1,36 @@
+name: Scheduled posts
+
+on:
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch:
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Restore scheduler cache
+        uses: actions/cache@v4
+        with:
+          path: .cache/scheduled-posts.json
+          key: scheduled-posts-${{ github.ref }}-${{ github.run_id }}
+          restore-keys: |
+            scheduled-posts-${{ github.ref }}-
+
+      - name: Check for due posts
+        id: due
+        run: node scripts/check-scheduled-posts.mjs
+
+      - name: Trigger Netlify build
+        if: steps.due.outputs.should_build == 'true'
+        env:
+          NETLIFY_BUILD_HOOK_URL: ${{ secrets.NETLIFY_BUILD_HOOK_URL }}
+        run: |
+          if [ -z "$NETLIFY_BUILD_HOOK_URL" ]; then
+            echo "Missing NETLIFY_BUILD_HOOK_URL secret."
+            exit 1
+          fi
+          curl -sS -X POST "$NETLIFY_BUILD_HOOK_URL"

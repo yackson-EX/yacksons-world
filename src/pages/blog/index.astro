@@ -3,7 +3,13 @@ import { getCollection, type CollectionEntry } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { formatListDate } from "../../lib/dates";
 
+const now = new Date();
+const showFuturePosts =
+  import.meta.env.DEV || import.meta.env.SHOW_FUTURE_POSTS === "true";
 const posts = (await getCollection("blog"))
+  .filter(
+    (post) => showFuturePosts || post.data.pubDate.valueOf() <= now.valueOf()
+  )
   .sort((a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
@@ -14,6 +20,9 @@ const posts = (await getCollection("blog"))
     {posts.map((post: CollectionEntry<"blog">) => (
       <li>
         <a href={`/blog/${post.id}/`}>{post.data.title}</a>
+        {showFuturePosts && post.data.pubDate.valueOf() > now.valueOf() && (
+          <span class="scheduled-badge">Scheduled</span>
+        )}
         {" "}
         <span>(Blog)</span>
         {" "}
