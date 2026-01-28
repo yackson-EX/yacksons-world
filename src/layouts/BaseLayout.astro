@@ -1239,7 +1239,7 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
 
         const storageKey = "yacksonDrawingData";
         const openKey = "yacksonDrawingOpen";
-        const resumeSeenKey = "yacksonDrawingResumeSeen";
+        let hasDrawing = false;
 
         const setWarning = (message) => {
           if (!saveWarning) return;
@@ -1247,6 +1247,10 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
         };
 
         const saveDrawing = () => {
+          if (!hasDrawing) {
+            localStorage.removeItem(storageKey);
+            return;
+          }
           try {
             const dataUrl = canvas.toDataURL("image/png");
             localStorage.setItem(storageKey, dataUrl);
@@ -1264,6 +1268,7 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
           image.onload = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+            hasDrawing = true;
           };
           image.src = dataUrl;
         };
@@ -1299,6 +1304,7 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
           ctx.stroke();
           lastX = pos.x;
           lastY = pos.y;
+          hasDrawing = true;
         };
 
         const endDraw = () => {
@@ -1386,6 +1392,7 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
           ctx.fillRect(0, 0, canvas.width, canvas.height);
           localStorage.removeItem(storageKey);
           setWarning("");
+          hasDrawing = false;
         });
 
         const openModal = () => {
@@ -1447,8 +1454,7 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
         });
 
         trigger.addEventListener("click", () => {
-          if (localStorage.getItem(storageKey) && !sessionStorage.getItem(resumeSeenKey)) {
-            sessionStorage.setItem(resumeSeenKey, "true");
+          if (localStorage.getItem(storageKey)) {
             openResume();
             return;
           }
