@@ -2,6 +2,7 @@
 title: Hello World
 pubDate: 2026-01-24T15:55:00.000-08:00
 category: Test
+imageAlign: left
 ---
 Reading this is proof that even an idiot can cobble together a website...
 
