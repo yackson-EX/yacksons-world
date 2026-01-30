@@ -6,6 +6,10 @@ npm create astro@latest -- --template basics
 
 > 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
 
+## Dev setup
+
+Use the pinned Node version in `.nvmrc` (Node 22): `nvm use` (or your Node version manager) before running `npm install`. This keeps `package-lock.json` stable across machines.
+
 ## 🚀 Project Structure
 
 Inside of your Astro project, you'll see the following folders and files:
