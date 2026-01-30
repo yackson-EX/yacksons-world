@@ -395,6 +395,10 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
           inset -1px -1px 0 rgba(0, 0, 0, 0.6);
       }
 
+      .feedback-box form {
+        margin: 0;
+      }
+
       .feedback-box label {
         display: block;
         font-size: 0.9em;
@@ -617,7 +621,7 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
 
       .drawing-actions {
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
         gap: 8px;
         padding: 8px;
         border-top: 1px solid rgba(255, 255, 255, 0.12);
@@ -637,6 +641,12 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
         margin-top: 6px;
         font-size: 0.8em;
         opacity: 0.75;
+      }
+
+      .drawing-status {
+        margin-left: auto;
+        font-size: 0.85em;
+        opacity: 0.9;
       }
 
       .drawing-modal {
@@ -900,22 +910,28 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
           ))}
           <div class="feedback-boxes" aria-label="Feedback boxes">
             <div class="feedback-box">
-              <label for="suggestion-input">Suggestion box</label>
-              <input
-                id="suggestion-input"
-                type="text"
-                placeholder="Type here..."
-                autocomplete="off"
-              />
+              <form class="feedback-form" data-label="suggestion">
+                <label for="suggestion-input">Suggestion box</label>
+                <input
+                  id="suggestion-input"
+                  type="text"
+                  placeholder="Type here..."
+                  autocomplete="off"
+                  enterkeyhint="send"
+                />
+              </form>
             </div>
             <div class="feedback-box">
-              <label for="complaint-input">Complaint box</label>
-              <input
-                id="complaint-input"
-                type="text"
-                placeholder="Type here..."
-                autocomplete="off"
-              />
+              <form class="feedback-form" data-label="complaint">
+                <label for="complaint-input">Complaint box</label>
+                <input
+                  id="complaint-input"
+                  type="text"
+                  placeholder="Type here..."
+                  autocomplete="off"
+                  enterkeyhint="send"
+                />
+              </form>
             </div>
             <div class="trash-wrap">
               <div class="trash-can" aria-hidden="true">
@@ -943,6 +959,7 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
         <canvas id="drawing-canvas" class="drawing-canvas" width="512" height="384"></canvas>
         <div class="drawing-actions">
           <button type="button" id="drawing-clear">Clear</button>
+          <div class="drawing-status" id="drawing-status" aria-live="polite"></div>
           <button type="button" id="drawing-send">Send to Yackson</button>
         </div>
         <div class="drawing-save-warning" id="drawing-save-warning" aria-live="polite"></div>
@@ -982,7 +999,7 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>/?~",
           hiddenWords: ["_eort_", "_Anghkooey_", "_Bah_"],
           hiddenRepeats: 20,
-          hiddenRepeatMap: { _eort_: 150, _Anghkooey_: 80, _Bah_: 60 },
+          hiddenRepeatMap: { _eort_: 70, _Anghkooey_: 35, _Bah_: 25 },
           minAlpha: 0.14,
           maxAlpha: 0.46,
           kx: 0.12,
@@ -993,6 +1010,8 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
           fontFamily:
             "ui-monospace, SFMono-Regular, Menlo, Consolas, Liberation Mono, Courier New, monospace",
         };
+
+        let baselineCells = 0;
 
         const draw = () => {
           const dpr = window.devicePixelRatio || 1;
@@ -1014,6 +1033,11 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
           const charWidth = Math.max(1, ctx.measureText("M").width);
           const cols = Math.ceil(width / charWidth);
           const rows = Math.ceil(height / settings.lineHeight);
+          const cells = Math.max(1, cols * rows);
+          if (!baselineCells) {
+            baselineCells = cells; // capture current look as reference density
+          }
+          const scale = cells / baselineCells;
           const alphaRange = settings.maxAlpha - settings.minAlpha;
           const invMaxDist = 1 / Math.SQRT2;
 
@@ -1057,7 +1081,9 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
           };
 
           for (const word of settings.hiddenWords) {
-            const count = settings.hiddenRepeatMap?.[word] ?? settings.hiddenRepeats;
+            const base = settings.hiddenRepeatMap?.[word] ?? settings.hiddenRepeats;
+            const scaled = Math.round(base * scale);
+            const count = Math.max(1, Math.min(scaled, Math.max(base, Math.round(base * 2))));
             for (let i = 0; i < count; i += 1) {
               placeWord(word);
             }
@@ -1105,6 +1131,8 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
         const popup = document.getElementById("feedback-popup");
         const popupMessage = document.getElementById("feedback-message");
         const popupOk = document.getElementById("feedback-ok");
+        const forms = Array.from(feedbackWrap.querySelectorAll(".feedback-form"));
+
         const openPopup = (text) => {
           if (!popup || !popupMessage) return;
           popupMessage.textContent = text;
@@ -1177,17 +1205,31 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
           }, popupDelay);
         };
 
-        const handleKey = (label) => (event) => {
-          if (event.key !== "Enter") return;
+        let lastSubmitTime = 0;
+
+        const handleSubmit = (form, label) => (event) => {
           event.preventDefault();
-          launchChip(event.currentTarget, label);
+          const input = form.querySelector("input");
+          if (!input) return;
+          launchChip(input, label);
+          lastSubmitTime = performance.now();
         };
 
-        const suggestionInput = document.getElementById("suggestion-input");
-        const complaintInput = document.getElementById("complaint-input");
+        const handleKeyFallback = (label) => (event) => {
+          if (event.key !== "Enter" && event.key !== "Unidentified") return;
+          const now = performance.now();
+          if (now - lastSubmitTime < 120) return;
+          event.preventDefault();
+          launchChip(event.currentTarget, label);
+          lastSubmitTime = now;
+        };
 
-        suggestionInput?.addEventListener("keydown", handleKey("suggestion"));
-        complaintInput?.addEventListener("keydown", handleKey("complaint"));
+        forms.forEach((form) => {
+          const label = form.getAttribute("data-label") ?? "suggestion";
+          form.addEventListener("submit", handleSubmit(form, label));
+          const input = form.querySelector("input");
+          input?.addEventListener("keyup", handleKeyFallback(label));
+        });
       })();
     </script>
     <script is:inline>
@@ -1201,6 +1243,7 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
         const clearBtn = document.getElementById("drawing-clear");
         const sendBtn = document.getElementById("drawing-send");
         const saveWarning = document.getElementById("drawing-save-warning");
+        const statusEl = document.getElementById("drawing-status");
         const modal = document.getElementById("drawing-modal");
         const modalClose = document.getElementById("drawing-modal-close");
         const resumeModal = document.getElementById("resume-modal");
@@ -1245,6 +1288,12 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
         const setWarning = (message) => {
           if (!saveWarning) return;
           saveWarning.textContent = message;
+        };
+
+        const setStatus = (message, isError = false) => {
+          if (!statusEl) return;
+          statusEl.textContent = message;
+          statusEl.style.color = isError ? "#ea323c" : "#e6e6e6";
         };
 
         const saveDrawing = () => {
@@ -1392,6 +1441,7 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
           ctx.fillRect(0, 0, canvas.width, canvas.height);
           localStorage.removeItem(storageKey);
           setWarning("");
+          setStatus("");
           hasDrawing = false;
         });
 
@@ -1433,17 +1483,45 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
           openOverlay();
         });
 
+        let sending = false;
         sendBtn.addEventListener("click", () => {
+          if (sending) return;
+          sending = true;
+          setStatus("Sending...");
           canvas.toBlob((blob) => {
-            if (!blob) return;
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = "yackson's-drawing.png";
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-            URL.revokeObjectURL(link.href);
-            openModal();
+            if (!blob) {
+              setStatus("Could not read drawing", true);
+              sending = false;
+              return;
+            }
+            const reader = new FileReader();
+            reader.onloadend = async () => {
+              try {
+                const dataUrl = reader.result;
+                const response = await fetch("/api/send-drawing", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ imageDataUrl: dataUrl }),
+                });
+                if (!response.ok) {
+                  throw new Error(`HTTP ${response.status}`);
+                }
+                setStatus("Sent!");
+                openModal();
+              } catch (error) {
+                setStatus("Send failed. Downloading instead.", true);
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = "yackson-drawing.png";
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                URL.revokeObjectURL(link.href);
+              } finally {
+                sending = false;
+              }
+            };
+            reader.readAsDataURL(blob);
           });
         });
 

@@ -1,5 +1,9 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import netlify from '@astrojs/netlify';
 
-// https://astro.build/config
-export default defineConfig({});
+// Netlify server output so /api/send-drawing runs as a function
+export default defineConfig({
+  output: 'server',
+  adapter: netlify(),
+});
