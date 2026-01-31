@@ -1,28 +1,23 @@
 ---
-import { getCollection, render, type CollectionEntry } from "astro:content";
+import { getCollection, getEntry, render, type CollectionEntry } from "astro:content";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import { normalizeMedium } from "../../../lib/reviews";
 import { formatFullDate } from "../../../lib/dates";
 
-export async function getStaticPaths() {
-  const posts = await getCollection("reviews");
-  const now = new Date();
-  const showFuturePosts =
-    import.meta.env.DEV || import.meta.env.SHOW_FUTURE_POSTS === "true";
-  return posts
-    .filter(
-      (post) => showFuturePosts || post.data.pubDate.valueOf() <= now.valueOf()
-    )
-    .map((post) => ({
-      params: { medium: normalizeMedium(post.data.medium), slug: post.id },
-      props: { post },
-    }));
+const slugParam = Array.isArray(Astro.params.slug)
+  ? Astro.params.slug.join("/")
+  : Astro.params.slug ?? "";
+const post = await getEntry("reviews", slugParam);
+if (!post) {
+  throw new Response("Not found", { status: 404 });
 }
 
-const { post } = Astro.props as { post: CollectionEntry<"reviews"> };
 const now = new Date();
 const showFuturePosts =
   import.meta.env.DEV || import.meta.env.SHOW_FUTURE_POSTS === "true";
+if (!showFuturePosts && post.data.pubDate.valueOf() > now.valueOf()) {
+  throw new Response("Not found", { status: 404 });
+}
 const { Content } = await render(post);
 ---
 
