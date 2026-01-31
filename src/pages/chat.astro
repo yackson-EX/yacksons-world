@@ -1,5 +1,9 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+
+const giscusTheme = import.meta.env.DEV
+  ? "http://localhost:4321/giscus-theme.css?v=1"
+  : new URL("/giscus-theme.css?v=1", Astro.site ?? "https://yacksons.world").toString();
 ---
 
 <BaseLayout title="Chat">
@@ -17,7 +21,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       data-reactions-enabled="0"
       data-emit-metadata="0"
       data-input-position="bottom"
-      data-theme="fro"
+      data-theme={giscusTheme}
       data-lang="en"
       crossorigin="anonymous"
       async
@@ -27,6 +31,12 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   <style>
     .chat-comments {
       min-height: 60vh;
+      padding-bottom: 12px;
+    }
+
+    /* Reserve space for Giscus load to reduce layout shift */
+    .comments.giscus-frame {
+      min-height: 320px;
     }
   </style>
 </BaseLayout>

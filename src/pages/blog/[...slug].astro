@@ -3,6 +3,10 @@ import { getCollection, getEntry, render, type CollectionEntry } from "astro:con
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { formatFullDate } from "../../lib/dates";
 
+const giscusTheme = import.meta.env.DEV
+  ? "http://localhost:4321/giscus-theme.css?v=1"
+  : new URL("/giscus-theme.css?v=1", Astro.site ?? "https://yacksons.world").toString();
+
 const slugParam = Array.isArray(Astro.params.slug)
   ? Astro.params.slug.join("/")
   : Astro.params.slug ?? "";
@@ -50,7 +54,7 @@ const { Content } = await render(post);
       data-reactions-enabled="0"
       data-emit-metadata="0"
       data-input-position="top"
-      data-theme="fro"
+      data-theme={giscusTheme}
       data-lang="en"
       crossorigin="anonymous"
       async
@@ -77,5 +81,95 @@ const { Content } = await render(post);
       margin-right: 0;
     }
 
+    :global(.post-figure) {
+      display: table;
+      margin: 0 auto 14px;
+      text-align: center;
+    }
+
+    :global(.post-content.images-left .post-figure) {
+      margin-left: 0;
+      margin-right: auto;
+      text-align: left;
+    }
+
+    :global(.post-content.images-right .post-figure) {
+      margin-left: auto;
+      margin-right: 0;
+      text-align: right;
+    }
+
+    :global(.post-content.images-left .post-figure img) {
+      margin-left: 0;
+      margin-right: auto;
+    }
+
+    :global(.post-content.images-right .post-figure img) {
+      margin-left: auto;
+      margin-right: 0;
+    }
+
+    :global(.post-figcaption) {
+      margin-top: 6px;
+      font-size: 0.95em;
+      opacity: 0.85;
+    }
+
+    /* Reserve space for Giscus to reduce layout shift */
+    .comments {
+      min-height: 320px;
+    }
+
   </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const figuresFromImages = (root) => {
+        const imgs = Array.from(root.querySelectorAll("img"));
+        imgs.forEach((img) => {
+          if (img.dataset.captionized) return;
+          const caption = img.getAttribute("alt");
+          const width = Number(img.getAttribute("width"));
+          const height = Number(img.getAttribute("height"));
+          if (width > 0 && height > 0) {
+            img.style.aspectRatio = `${width} / ${height}`;
+          } else {
+            img.style.aspectRatio = "4 / 3";
+          }
+          if (!caption) return;
+
+          const figure = document.createElement("figure");
+          figure.className = "post-figure";
+          const figcaption = document.createElement("figcaption");
+          figcaption.className = "post-figcaption";
+          figcaption.textContent = caption;
+
+          const parent = img.parentNode;
+          if (!parent) return;
+
+          // If the image sits inside a paragraph, place the figure after the paragraph
+          // to avoid invalid nesting and weird alignment.
+          if (parent.tagName === "P") {
+            parent.insertAdjacentElement("afterend", figure);
+            figure.appendChild(img);
+            figure.appendChild(figcaption);
+            if (!parent.textContent.trim()) {
+              parent.remove();
+            }
+          } else {
+            parent.insertBefore(figure, img);
+            figure.appendChild(img);
+            figure.appendChild(figcaption);
+          }
+
+          img.dataset.captionized = "true";
+        });
+      };
+
+      const container = document.querySelector(".post-content");
+      if (container) {
+        figuresFromImages(container);
+      }
+    });
+  </script>
 </BaseLayout>

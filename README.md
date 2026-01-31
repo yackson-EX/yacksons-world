@@ -48,3 +48,10 @@ All commands are run from the root of the project, from a terminal:
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+
+## Posting images (blog/reviews/Decap)
+- Visible captions come from the image `alt` only. If you want hover text without a visible caption, set a Title and leave Alt empty. If you set both, Alt shows under the image; Title is hover-only.
+- Alignment comes from `imageAlign` frontmatter (`left`, `right`, `center`); captions follow the image alignment automatically.
+- Collections with alignment in Decap: Blog, Reviews, About, FAQ. Photography is intentionally fixed-layout (no alignment field).
+- If a Markdown image is inside a paragraph, the page runtime will move the image into a `<figure>` placed after that paragraph and add a `<figcaption>` using the title/alt text. Empty paragraphs left behind are removed. You don’t need to do anything special—just know this normalization happens for proper caption alignment.
+- Photography collection: captions come from the `caption` field; alt text from `alt` (fallback `title`).

@@ -6,4 +6,12 @@ import netlify from '@astrojs/netlify';
 export default defineConfig({
   output: 'server',
   adapter: netlify(),
+  site: 'https://yacksons.world',
+  vite: {
+    server: {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    },
+  },
 });

@@ -10,6 +10,8 @@ const blog = defineCollection({
     pubDate: z.coerce.date(),
     category: z.string().optional(),
     imageAlign: z.enum(["left", "center", "right"]).optional(),
+    width: z.number().int().positive().optional(),
+    height: z.number().int().positive().optional(),
   }),
 });
 
@@ -19,6 +21,9 @@ const reviews = defineCollection({
     title: z.string(),
     pubDate: z.coerce.date(),
     medium: z.enum(REVIEW_MEDIA),
+    imageAlign: z.enum(["left", "center", "right"]).optional(),
+    width: z.number().int().positive().optional(),
+    height: z.number().int().positive().optional(),
   }),
 });
 
@@ -37,6 +42,9 @@ const pages = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/pages" }),
   schema: z.object({
     title: z.string(),
+    imageAlign: z.enum(["left", "center", "right"]).optional(),
+    width: z.number().int().positive().optional(),
+    height: z.number().int().positive().optional(),
   }),
 });
 

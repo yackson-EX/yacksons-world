@@ -11,5 +11,140 @@ const { Content } = await render(page);
 
 <BaseLayout title={page.data.title ?? "F.A.Q."}>
   <h1>{page.data.title ?? "F.A.Q."}</h1>
-  <Content />
+  <div
+    class:list={[
+      "post-content",
+      page.data.imageAlign === "left" && "images-left",
+      page.data.imageAlign === "right" && "images-right",
+    ]}
+  >
+    <Content />
+  </div>
+
+  <style>
+    :global(.post-content img) {
+      display: block;
+      margin: 0 auto 14px;
+      max-width: min(200px, 100%);
+      height: auto;
+    }
+
+    :global(.post-content.images-left img) {
+      margin-left: 0;
+      margin-right: auto;
+    }
+
+    :global(.post-content.images-right img) {
+      margin-left: auto;
+      margin-right: 0;
+    }
+
+    :global(.post-figure) {
+      display: table;
+      margin: 0 auto 14px;
+      text-align: center;
+    }
+
+    :global(.post-content.images-left .post-figure) {
+      margin-left: 0;
+      margin-right: auto;
+      text-align: left;
+    }
+
+    :global(.post-content.images-right .post-figure) {
+      margin-left: auto;
+      margin-right: 0;
+      text-align: right;
+    }
+
+    :global(.post-figure.images-left) {
+      margin-left: 0;
+      margin-right: auto;
+      text-align: left;
+    }
+
+    :global(.post-figure.images-right) {
+      margin-left: auto;
+      margin-right: 0;
+      text-align: right;
+    }
+
+    :global(.post-figure.images-left img) {
+      margin-left: 0;
+      margin-right: auto;
+    }
+
+    :global(.post-figure.images-right img) {
+      margin-left: auto;
+      margin-right: 0;
+    }
+
+    :global(.post-figcaption) {
+      margin-top: 6px;
+      font-size: 0.95em;
+      opacity: 0.85;
+    }
+
+    /* Reserve space for Giscus to reduce layout shift */
+    .comments {
+      min-height: 320px;
+    }
+  </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const figuresFromImages = (root) => {
+        const alignClass = root.classList.contains("images-left")
+          ? "images-left"
+          : root.classList.contains("images-right")
+            ? "images-right"
+            : null;
+        const imgs = Array.from(root.querySelectorAll("img"));
+        imgs.forEach((img) => {
+          if (img.dataset.captionized) return;
+          const caption = img.getAttribute("alt");
+          const width = Number(img.getAttribute("width"));
+          const height = Number(img.getAttribute("height"));
+          if (width > 0 && height > 0) {
+            img.style.aspectRatio = `${width} / ${height}`;
+          } else {
+            img.style.aspectRatio = "4 / 3";
+          }
+          if (!caption) return;
+
+          const figure = document.createElement("figure");
+          figure.className = "post-figure";
+          if (alignClass) {
+            figure.classList.add(alignClass);
+          }
+          const figcaption = document.createElement("figcaption");
+          figcaption.className = "post-figcaption";
+          figcaption.textContent = caption;
+
+          const parent = img.parentNode;
+          if (!parent) return;
+
+          if (parent.tagName === "P") {
+            parent.insertAdjacentElement("afterend", figure);
+            figure.appendChild(img);
+            figure.appendChild(figcaption);
+            if (!parent.textContent.trim()) {
+              parent.remove();
+            }
+          } else {
+            parent.insertBefore(figure, img);
+            figure.appendChild(img);
+            figure.appendChild(figcaption);
+          }
+
+          img.dataset.captionized = "true";
+        });
+      };
+
+      const container = document.querySelector(".post-content");
+      if (container) {
+        figuresFromImages(container);
+      }
+    });
+  </script>
 </BaseLayout>
