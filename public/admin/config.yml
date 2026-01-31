@@ -15,17 +15,17 @@ collections:
         file: "src/content/pages/about.md"
         fields:
           - { name: "title", label: "Title", widget: "string" }
-      - name: "imageAlign"
-        label: "Image alignment"
-        widget: "select"
-        required: false
-        options:
-          - { label: "Center", value: "center" }
-          - { label: "Left", value: "left" }
-          - { label: "Right", value: "right" }
-      - { name: "body", label: "Body", widget: "markdown" }
-      - { name: "width", label: "Image width (px)", widget: "number", required: false, value_type: "int" }
-      - { name: "height", label: "Image height (px)", widget: "number", required: false, value_type: "int" }
+          - name: "imageAlign"
+            label: "Image alignment"
+            widget: "select"
+            required: false
+            options:
+              - { label: "Center", value: "center" }
+              - { label: "Left", value: "left" }
+              - { label: "Right", value: "right" }
+          - { name: "width", label: "Image width (px)", widget: "number", required: false, value_type: "int" }
+          - { name: "height", label: "Image height (px)", widget: "number", required: false, value_type: "int" }
+          - { name: "body", label: "Body", widget: "markdown" }
       - name: "faq"
         label: "F.A.Q."
         file: "src/content/pages/faq.md"
@@ -39,7 +39,10 @@ collections:
               - { label: "Center", value: "center" }
               - { label: "Left", value: "left" }
               - { label: "Right", value: "right" }
+          - { name: "width", label: "Image width (px)", widget: "number", required: false, value_type: "int" }
+          - { name: "height", label: "Image height (px)", widget: "number", required: false, value_type: "int" }
           - { name: "body", label: "Body", widget: "markdown" }
+
   - name: "blog"
     label: "Blog"
     folder: "src/content/blog"
@@ -60,6 +63,7 @@ collections:
       - { name: "width", label: "Image width (px)", widget: "number", required: false, value_type: "int" }
       - { name: "height", label: "Image height (px)", widget: "number", required: false, value_type: "int" }
       - { name: "body", label: "Body", widget: "markdown" }
+
   - name: "reviews"
     label: "Reviews"
     folder: "src/content/reviews"
@@ -83,6 +87,7 @@ collections:
       - { name: "width", label: "Image width (px)", widget: "number", required: false, value_type: "int" }
       - { name: "height", label: "Image height (px)", widget: "number", required: false, value_type: "int" }
       - { name: "body", label: "Body", widget: "markdown" }
+
   - name: "photography"
     label: "Photography"
     folder: "src/content/photography"
