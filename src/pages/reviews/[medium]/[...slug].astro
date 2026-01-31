@@ -133,8 +133,6 @@ const { Content } = await render(post);
           const height = Number(img.getAttribute("height"));
           if (width > 0 && height > 0) {
             img.style.aspectRatio = `${width} / ${height}`;
-          } else {
-            img.style.aspectRatio = "4 / 3";
           }
           if (!caption) return;
 
