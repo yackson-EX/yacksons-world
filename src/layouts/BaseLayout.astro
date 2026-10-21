@@ -1306,6 +1306,7 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
         const storageKey = "yacksonDrawingData";
         const openKey = "yacksonDrawingOpen";
         let hasDrawing = false;
+        let restoreVersion = 0;
 
         const setWarning = (message) => {
           if (!saveWarning) return;
@@ -1335,8 +1336,10 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
         const loadDrawing = () => {
           const dataUrl = localStorage.getItem(storageKey);
           if (!dataUrl) return;
+          const version = ++restoreVersion;
           const image = new Image();
           image.onload = () => {
+            if (version !== restoreVersion) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
             hasDrawing = true;
@@ -1457,7 +1460,10 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
         window.addEventListener("mousemove", moveDrag);
         window.addEventListener("mouseup", endDrag);
 
-        clearBtn.addEventListener("click", () => {
+        // Reset both the visible pixels and the in-memory/saved drawing state.
+        const resetDrawing = () => {
+          restoreVersion += 1; // Ignore a restored image that is still loading.
+          drawing = false;
           ctx.clearRect(0, 0, canvas.width, canvas.height);
           ctx.fillStyle = "#ffffff";
           ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -1465,7 +1471,9 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
           setWarning("");
           setStatus("");
           hasDrawing = false;
-        });
+        };
+
+        clearBtn.addEventListener("click", resetDrawing);
 
         const openModal = () => {
           modal.classList.add("is-open");
@@ -1499,7 +1507,7 @@ const reviewNav = REVIEW_MEDIA.map((medium) => ({
         });
 
         resumeNo.addEventListener("click", () => {
-          localStorage.removeItem(storageKey);
+          resetDrawing();
           localStorage.removeItem(openKey);
           closeResume();
           openOverlay();
