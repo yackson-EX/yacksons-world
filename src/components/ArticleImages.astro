@@ -1,0 +1,298 @@
+---
+// Shared photo viewer for Blog, Reviews, About and F.A.Q.; not Photography.
+// Feature one image in Markdown: ![Caption](/uploads/photo.jpg "{wide}")
+---
+
+  <div class="article-lightbox" id="article-lightbox" aria-hidden="true">
+    <div class="article-lightbox-frame" role="dialog" aria-modal="true" aria-label="Article photo viewer">
+      <button class="article-lightbox-close" type="button" aria-label="Close photo">✕</button>
+      <button class="article-lightbox-prev" type="button" aria-label="Previous photo">‹</button>
+      <button class="article-lightbox-next" type="button" aria-label="Next photo">›</button>
+      <img class="article-lightbox-image" alt="" />
+      <div class="article-lightbox-caption"></div>
+    </div>
+  </div>
+<style>
+
+  :global(.post-content .article-image-trigger) {
+    display: block;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: url("/cursors/cursor2.cur"), url("/cursors/cursor-fallback.png") 2 2,
+      url("/cursors/cursor.png") 2 2, pointer;
+  }
+  :global(.post-content .article-image-trigger:focus-visible) {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+  }
+  :global(.post-content.images-left .article-image-trigger) { margin-left: 0; margin-right: auto; }
+  :global(.post-content.images-right .article-image-trigger) { margin-left: auto; margin-right: 0; }
+  :global(.post-content .post-figure) { max-width: 100%; }
+  .article-lightbox button {
+    cursor: url("/cursors/cursor2.cur"), url("/cursors/cursor-fallback.png") 2 2,
+      url("/cursors/cursor.png") 2 2, pointer;
+  }
+
+    /* Shared article viewer; standalone Photography gallery is unchanged. */
+    .article-lightbox {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 999;
+      overscroll-behavior: contain;
+      touch-action: none;
+    }
+
+    .article-lightbox.is-open {
+      display: flex;
+    }
+
+    .article-lightbox-frame {
+      position: relative;
+      width: 100%;
+      max-width: min(1200px, 95vw);
+      max-height: 90vh;
+      padding: 23px 59px 19px;
+      background: #000;
+      border-top: 3px solid rgba(255, 255, 255, 0.35);
+      border-left: 3px solid rgba(255, 255, 255, 0.35);
+      border-right: 3px solid rgba(255, 255, 255, 0.12);
+      border-bottom: 3px solid rgba(255, 255, 255, 0.12);
+      box-shadow:
+        inset 2px 2px 0 rgba(255, 255, 255, 0.08),
+        inset -2px -2px 0 rgba(0, 0, 0, 0.6),
+        0 0 0 2px rgba(255, 255, 255, 0.08);
+    }
+
+    .article-lightbox-image {
+      display: block;
+      max-width: 100%;
+      max-height: 70vh;
+      margin: 0 auto;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .article-lightbox-caption {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 0.95em;
+      opacity: 0.85;
+    }
+
+    .article-lightbox-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: 0;
+      background: transparent url("/x-button.png") no-repeat center / contain;
+      color: transparent;
+      font-size: 0;
+    }
+
+    .article-lightbox-prev,
+    .article-lightbox-next {
+      position: absolute;
+      top: 50%;
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      border: 0;
+      background: transparent url("/arrow.png") no-repeat center / contain;
+      color: transparent;
+      font-size: 0;
+      transform: translateY(-50%);
+    }
+
+    .article-lightbox-prev { left: 6px; }
+    .article-lightbox-next { right: 6px; transform: translateY(-50%) scaleX(-1); }
+
+    :global(.article-lightbox button[hidden]) { display: none; }
+
+    :global(html.article-lightbox-open),
+    :global(body.article-lightbox-open) {
+      overflow: hidden;
+      height: 100%;
+      touch-action: none;
+    }
+
+    @media (max-width: 600px) {
+      .article-lightbox { padding: 10px; }
+      .article-lightbox-frame { padding: 24px 43px 16px; }
+    }
+
+</style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const figuresFromImages = (root) => {
+        const imgs = Array.from(root.querySelectorAll("img"));
+        imgs.forEach((img) => {
+          if (img.getAttribute("title") === "{wide}") {
+            img.classList.add("post-image-wide");
+            img.removeAttribute("title");
+          }
+          if (img.dataset.captionized) return;
+          const caption = img.getAttribute("alt");
+          const width = Number(img.getAttribute("width"));
+          const height = Number(img.getAttribute("height"));
+          if (width > 0 && height > 0) {
+            img.style.aspectRatio = `${width} / ${height}`;
+          }
+          if (!caption) return;
+
+          const figure = document.createElement("figure");
+          figure.className = "post-figure";
+          if (root.classList.contains("images-left")) figure.classList.add("images-left");
+          if (root.classList.contains("images-right")) figure.classList.add("images-right");
+          const figcaption = document.createElement("figcaption");
+          figcaption.className = "post-figcaption";
+          figcaption.textContent = caption;
+
+          const parent = img.parentNode;
+          if (!parent) return;
+
+          // If the image sits inside a paragraph, place the figure after the paragraph
+          // to avoid invalid nesting and weird alignment.
+          if (parent.tagName === "P") {
+            parent.insertAdjacentElement("afterend", figure);
+            figure.appendChild(img);
+            figure.appendChild(figcaption);
+            if (!parent.textContent.trim()) {
+              parent.remove();
+            }
+          } else {
+            parent.insertBefore(figure, img);
+            figure.appendChild(img);
+            figure.appendChild(figcaption);
+          }
+
+          img.dataset.captionized = "true";
+        });
+      };
+
+      const container = document.querySelector(".post-content");
+      if (container) {
+        figuresFromImages(container);
+
+        const lightbox = document.getElementById("article-lightbox");
+        const lightboxImage = lightbox?.querySelector(".article-lightbox-image");
+        const lightboxCaption = lightbox?.querySelector(".article-lightbox-caption");
+        const closeButton = lightbox?.querySelector(".article-lightbox-close");
+        const prevButton = lightbox?.querySelector(".article-lightbox-prev");
+        const nextButton = lightbox?.querySelector(".article-lightbox-next");
+        const triggers = [];
+        let currentIndex = -1;
+        let previousFocus = null;
+
+        // Keep linked images acting as links; turn other post images into accessible buttons.
+        for (const img of container.querySelectorAll("img")) {
+          if (img.closest("a, button, picture, [data-no-lightbox]")) continue;
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "article-image-trigger";
+          button.setAttribute("aria-label", "Enlarge image: " + (img.alt || "photo"));
+          button.setAttribute("aria-haspopup", "dialog");
+          img.parentNode.insertBefore(button, img);
+          button.appendChild(img);
+          triggers.push(button);
+        }
+
+        const closeLightbox = () => {
+          if (!lightbox?.classList.contains("is-open")) return;
+          lightbox.classList.remove("is-open");
+          lightbox.setAttribute("aria-hidden", "true");
+          document.documentElement.classList.remove("article-lightbox-open");
+          document.body.classList.remove("article-lightbox-open");
+          if (lightboxImage) {
+            lightboxImage.removeAttribute("src");
+            lightboxImage.alt = "";
+          }
+          if (lightboxCaption) lightboxCaption.textContent = "";
+          currentIndex = -1;
+          if (previousFocus instanceof HTMLElement) previousFocus.focus();
+          previousFocus = null;
+        };
+
+        const openAtIndex = (index) => {
+          if (index < 0 || index >= triggers.length || !lightbox || !lightboxImage) return;
+          const img = triggers[index].querySelector("img");
+          if (!img) return;
+          const source = img.currentSrc || img.src;
+          if (!source) return;
+          lightboxImage.src = source;
+          lightboxImage.alt = img.alt;
+          if (lightboxCaption) lightboxCaption.textContent = img.alt || "";
+          currentIndex = index;
+          if (!lightbox.classList.contains("is-open")) {
+            previousFocus = document.activeElement;
+            lightbox.classList.add("is-open");
+            lightbox.setAttribute("aria-hidden", "false");
+            document.documentElement.classList.add("article-lightbox-open");
+            document.body.classList.add("article-lightbox-open");
+            closeButton?.focus();
+          }
+        };
+
+        const step = (delta) => {
+          if (currentIndex === -1) return;
+          openAtIndex((currentIndex + delta + triggers.length) % triggers.length);
+        };
+
+        triggers.forEach((button, index) => {
+          button.addEventListener("click", () => openAtIndex(index));
+        });
+        if (prevButton) prevButton.hidden = triggers.length < 2;
+        if (nextButton) nextButton.hidden = triggers.length < 2;
+        closeButton?.addEventListener("click", closeLightbox);
+        prevButton?.addEventListener("click", () => step(-1));
+        nextButton?.addEventListener("click", () => step(1));
+        lightbox?.addEventListener("click", (event) => {
+          if (event.target === lightbox) closeLightbox();
+        });
+
+        let touchStartX = 0;
+        lightbox?.addEventListener("touchstart", (event) => {
+          touchStartX = event.changedTouches[0]?.clientX ?? 0;
+        }, { passive: true });
+        lightbox?.addEventListener("touchend", (event) => {
+          const delta = (event.changedTouches[0]?.clientX ?? 0) - touchStartX;
+          if (Math.abs(delta) > 40) step(delta > 0 ? -1 : 1);
+        }, { passive: true });
+
+        window.addEventListener("keydown", (event) => {
+          if (!lightbox?.classList.contains("is-open")) return;
+          if (event.key === "Escape") {
+            closeLightbox();
+          } else if (event.key === "ArrowLeft") {
+            step(-1);
+          } else if (event.key === "ArrowRight") {
+            step(1);
+          } else if (event.key === "Tab") {
+            // Keep keyboard focus inside the modal until it closes.
+            const buttons = [closeButton, prevButton, nextButton]
+              .filter((button) => button instanceof HTMLButtonElement && !button.hidden);
+            const first = buttons[0];
+            const last = buttons[buttons.length - 1];
+            if (event.shiftKey && document.activeElement === first) {
+              event.preventDefault();
+              last?.focus();
+            } else if (!event.shiftKey && document.activeElement === last) {
+              event.preventDefault();
+              first?.focus();
+            }
+          }
+        });
+      }
+    });
+  </script>

@@ -55,3 +55,5 @@ Feel free to check [our documentation](https://docs.astro.build) or jump into ou
 - Collections with alignment in Decap: Blog, Reviews, About, FAQ. Photography is intentionally fixed-layout (no alignment field).
 - If a Markdown image is inside a paragraph, the page runtime will move the image into a `<figure>` placed after that paragraph and add a `<figcaption>` using the title/alt text. Empty paragraphs left behind are removed. You don’t need to do anything special—just know this normalization happens for proper caption alignment.
 - Photography collection: captions come from the `caption` field; alt text from `alt` (fallback `title`).
+
+- Written pages (Blog, Reviews, About, F.A.Q.) retain their original compact image display by default. To feature one larger photograph, use the reserved Markdown image title `{wide}`, as in `![Caption](/uploads/photo.jpg "{wide}")`. The marker is removed from hover text. Visible captions continue to use Alt; unlinked images can be clicked to enlarge. The separate Photography gallery is unchanged.

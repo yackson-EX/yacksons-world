@@ -1,5 +1,6 @@
 ---
 import { getCollection, getEntry, render, type CollectionEntry } from "astro:content";
+import ArticleImages from "../../components/ArticleImages.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { formatFullDate } from "../../lib/dates";
 
@@ -42,6 +43,7 @@ const { Content } = await render(post);
   >
     <Content />
   </div>
+  <ArticleImages />
   <section class="comments" aria-label="Comments">
     <script
       src="https://giscus.app/client.js"
@@ -65,10 +67,15 @@ const { Content } = await render(post);
     .post-content :global(img) {
       display: block;
       margin: 0 auto;
-      max-width: 200px;
+      max-width: min(200px, 100%);
       max-height: 200px;
       width: auto;
       height: auto;
+    }
+
+    .post-content :global(img.post-image-wide) {
+      max-width: 100%;
+      max-height: min(80vh, 900px);
     }
 
     .post-content.images-left :global(img) {
@@ -83,6 +90,7 @@ const { Content } = await render(post);
 
     :global(.post-figure) {
       display: table;
+      max-width: 100%;
       margin: 0 auto 14px;
       text-align: center;
     }
@@ -122,52 +130,5 @@ const { Content } = await render(post);
 
   </style>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const figuresFromImages = (root) => {
-        const imgs = Array.from(root.querySelectorAll("img"));
-        imgs.forEach((img) => {
-          if (img.dataset.captionized) return;
-          const caption = img.getAttribute("alt");
-          const width = Number(img.getAttribute("width"));
-          const height = Number(img.getAttribute("height"));
-          if (width > 0 && height > 0) {
-            img.style.aspectRatio = `${width} / ${height}`;
-          }
-          if (!caption) return;
 
-          const figure = document.createElement("figure");
-          figure.className = "post-figure";
-          const figcaption = document.createElement("figcaption");
-          figcaption.className = "post-figcaption";
-          figcaption.textContent = caption;
-
-          const parent = img.parentNode;
-          if (!parent) return;
-
-          // If the image sits inside a paragraph, place the figure after the paragraph
-          // to avoid invalid nesting and weird alignment.
-          if (parent.tagName === "P") {
-            parent.insertAdjacentElement("afterend", figure);
-            figure.appendChild(img);
-            figure.appendChild(figcaption);
-            if (!parent.textContent.trim()) {
-              parent.remove();
-            }
-          } else {
-            parent.insertBefore(figure, img);
-            figure.appendChild(img);
-            figure.appendChild(figcaption);
-          }
-
-          img.dataset.captionized = "true";
-        });
-      };
-
-      const container = document.querySelector(".post-content");
-      if (container) {
-        figuresFromImages(container);
-      }
-    });
-  </script>
 </BaseLayout>
