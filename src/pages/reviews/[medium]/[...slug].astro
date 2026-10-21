@@ -1,5 +1,6 @@
 ---
 import { getCollection, getEntry, render, type CollectionEntry } from "astro:content";
+import ArticleImages from "../../../components/ArticleImages.astro";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import { normalizeMedium } from "../../../lib/reviews";
 import { formatFullDate } from "../../../lib/dates";
@@ -43,6 +44,7 @@ const { Content } = await render(post);
   >
     <Content />
   </div>
+  <ArticleImages />
   <section class="comments" aria-label="Comments">
     <script
       src="https://giscus.app/client.js"
@@ -70,6 +72,11 @@ const { Content } = await render(post);
       max-height: 200px;
       width: auto;
       height: auto;
+    }
+
+    .post-content :global(img.post-image-wide) {
+      max-width: 100%;
+      max-height: min(80vh, 900px);
     }
 
     .post-content.images-left :global(img) {
@@ -122,50 +129,5 @@ const { Content } = await render(post);
     }
   </style>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const figuresFromImages = (root) => {
-        const imgs = Array.from(root.querySelectorAll("img"));
-        imgs.forEach((img) => {
-          if (img.dataset.captionized) return;
-          const caption = img.getAttribute("alt");
-          const width = Number(img.getAttribute("width"));
-          const height = Number(img.getAttribute("height"));
-          if (width > 0 && height > 0) {
-            img.style.aspectRatio = `${width} / ${height}`;
-          }
-          if (!caption) return;
 
-          const figure = document.createElement("figure");
-          figure.className = "post-figure";
-          const figcaption = document.createElement("figcaption");
-          figcaption.className = "post-figcaption";
-          figcaption.textContent = caption;
-
-          const parent = img.parentNode;
-          if (!parent) return;
-
-          if (parent.tagName === "P") {
-            parent.insertAdjacentElement("afterend", figure);
-            figure.appendChild(img);
-            figure.appendChild(figcaption);
-            if (!parent.textContent.trim()) {
-              parent.remove();
-            }
-          } else {
-            parent.insertBefore(figure, img);
-            figure.appendChild(img);
-            figure.appendChild(figcaption);
-          }
-
-          img.dataset.captionized = "true";
-        });
-      };
-
-      const container = document.querySelector(".post-content");
-      if (container) {
-        figuresFromImages(container);
-      }
-    });
-  </script>
 </BaseLayout>
