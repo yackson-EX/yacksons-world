@@ -32,6 +32,59 @@
   :global(.post-content.images-left .article-image-trigger) { margin-left: 0; margin-right: auto; }
   :global(.post-content.images-right .article-image-trigger) { margin-left: auto; margin-right: 0; }
   :global(.post-content .post-figure) { max-width: 100%; }
+
+  /* Paired article photos retain individual captions and lightbox controls.
+     Authors mark two adjacent Markdown images with the title "{pair}". */
+  :global(.post-content .article-photo-row) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    width: 100%;
+    max-width: 100%;
+    margin: 14px auto 22px;
+    align-items: start;
+  }
+  :global(.post-content .article-photo-row .post-figure) {
+    display: block;
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
+    margin: 0;
+    text-align: center;
+  }
+  :global(.post-content .article-photo-row .article-image-trigger) {
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+  :global(.post-content .article-photo-row .post-figure img) {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: min(50vh, 500px);
+    object-fit: contain;
+  }
+  :global(.post-content .article-photo-row .post-figcaption) {
+    text-align: center;
+  }
+
+  @media (max-width: 600px) {
+    :global(.post-content .article-photo-row) {
+      display: flex;
+      overflow-x: auto;
+      overflow-y: hidden;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
+      padding-bottom: 8px;
+    }
+    :global(.post-content .article-photo-row .post-figure) {
+      flex: 0 0 min(82%, 360px);
+      scroll-snap-align: start;
+    }
+  }
   .article-lightbox button {
     cursor: url("/cursors/cursor2.cur"), url("/cursors/cursor-fallback.png") 2 2,
       url("/cursors/cursor.png") 2 2, pointer;
@@ -142,6 +195,10 @@
             img.classList.add("post-image-wide");
             img.removeAttribute("title");
           }
+          if (img.getAttribute("title") === "{pair}") {
+            img.dataset.photoPair = "true";
+            img.removeAttribute("title");
+          }
           if (img.dataset.captionized) return;
           const caption = img.getAttribute("alt");
           const width = Number(img.getAttribute("width"));
@@ -181,9 +238,27 @@
         });
       };
 
+      const groupPhotoPairs = (root) => {
+        const figures = Array.from(root.querySelectorAll(".post-figure"));
+        for (const figure of figures) {
+          if (!figure.querySelector('img[data-photo-pair="true"]')) continue;
+          const next = figure.nextElementSibling;
+          if (!next?.classList.contains("post-figure")) continue;
+          if (!next.querySelector('img[data-photo-pair="true"]')) continue;
+
+          const row = document.createElement("div");
+          row.className = "article-photo-row";
+          row.setAttribute("role", "group");
+          row.setAttribute("aria-label", "Photo pair");
+          figure.parentNode.insertBefore(row, figure);
+          row.append(figure, next);
+        }
+      };
+
       const container = document.querySelector(".post-content");
       if (container) {
         figuresFromImages(container);
+        groupPhotoPairs(container);
 
         const lightbox = document.getElementById("article-lightbox");
         const lightboxImage = lightbox?.querySelector(".article-lightbox-image");
