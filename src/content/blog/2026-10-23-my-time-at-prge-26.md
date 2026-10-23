@@ -17,7 +17,7 @@ I had a few purchases in mind and some people I really wanted to meet, but I als
 <img src="/uploads/prge26-p26-008-welcome-sign.jpg" alt="Selfie beneath the large WELCOME sign at Portland Retro Gaming Expo, holding up a peace sign." data-caption="Turns out “one of these years” works better when you actually pick one." title="If I look calm, it&#x27;s because the vendor hall hasn&#x27;t opened yet." width="4896" height="3672" loading="eager" decoding="async" class="post-image-wide">
 
 
-## Friday: CREDIT 01 — PRESS START
+## Friday: CREDIT 01 / PRESS START
 
 
 Friday began at the completely unreasonable hour of about four in the morning. I flew from San Jose to Portland, surviving both a boarding-system outage and a cockpit-window problem before taking the MAX light rail practically to the door of my hotel. The Hyatt was directly across from the convention center. I checked in, showered, dropped my luggage, and walked over with the whole convention day still ahead of me.
@@ -110,10 +110,10 @@ Michael told me his Dracula was inspired by Bela Lugosi's performance in the 193
 <img src="/uploads/prge26-p26-028-michael-guinn-selfie.jpg" alt="Posing at the Dracula voice actor&#x27;s booth and pointing toward the signed Castlevania: Symphony of the Night cover." data-caption="Dracula was considerably friendlier than advertised. (っ◕‿◕)っ" title="Unlike his character, Michael didn&#x27;t threaten me even once. Kind of disappointing." width="3671" height="2458" loading="lazy" decoding="async" data-photo-pair="true">
 
 
-<img src="/uploads/prge26-p26-027-dracula-inscription.jpg" alt="The Symphony of the Night manual opened to a red handwritten inscription beginning What is a man?! and ending Have at you!" data-caption="Pretty sure this put a hex on me. I&#x27;ve been advised to avoid castles and moonlit staircases for the foreseeable future." title="What is a man? Someone who pays Dracula to write in his instruction manual, apparently." width="3530" height="2715" loading="lazy" decoding="async" data-photo-pair="true">
-
-
 <img src="/uploads/prge26-p26-029-signed-sotn-cover.jpg" alt="The Castlevania: Symphony of the Night PlayStation cover with gold and silver autographs across the artwork." data-caption="I keep opening the case just to stare at the signatures. Send help." title="Centuries of father-son conflict, resolved with two Sharpies and my PlayStation game." width="2458" height="2441" loading="lazy" decoding="async" data-photo-pair="true">
+
+
+<img src="/uploads/prge26-p26-027-dracula-inscription.jpg" alt="The Symphony of the Night manual opened to a red handwritten inscription beginning What is a man?! and ending Have at you!" data-caption="What is a man? Someone who pays Dracula to write in his instruction manual, apparently." title="Pretty sure this put a hex on me. I&#x27;ve been advised to avoid castles and moonlit staircases for the foreseeable future." width="3530" height="2715" loading="lazy" decoding="async" data-photo-pair="true">
 
 
 The evening belonged to arcade games and pinball. Free play is every bit as good as it sounds: see something interesting, walk up, start playing. I wandered between tables and found a ten-player *Bomberman* setup on a Sega Saturn that was surrounded by a horrifying quantity of controllers and cables. By the time I returned to the hotel, I was tired, happy, and very ready to do it again.
@@ -398,7 +398,7 @@ I love the games, and I'm very happy with what I brought home. But the things th
 The games were a good enough reason to fly to Portland. The people are why I'm so glad I did.
 
 
-That’s all, dood\! o(_ _)o
+That’s all, dood\! &emsp;&emsp;o(_ _)o
 
 
 \- Yackson
