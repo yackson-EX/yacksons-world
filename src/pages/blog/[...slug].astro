@@ -1,6 +1,7 @@
 ---
 import { getCollection, getEntry, render, type CollectionEntry } from "astro:content";
 import ArticleImages from "../../components/ArticleImages.astro";
+import PhotoEssayPresentation from "../../components/PhotoEssayPresentation.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { formatFullDate } from "../../lib/dates";
 
@@ -35,6 +36,7 @@ const { Content } = await render(post);
     )}
   </p>
   <div
+    data-photo-presentation={slugParam === "2026-10-23-my-time-at-prge-26" ? "balanced" : undefined}
     class:list={[
       "post-content",
       post.data.imageAlign === "left" && "images-left",
@@ -44,6 +46,7 @@ const { Content } = await render(post);
     <Content />
   </div>
   <ArticleImages />
+  {slugParam === "2026-10-23-my-time-at-prge-26" && <PhotoEssayPresentation />}
   <section class="comments" aria-label="Comments">
     <script
       src="https://giscus.app/client.js"

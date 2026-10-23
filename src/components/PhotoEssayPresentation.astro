@@ -1,0 +1,116 @@
+---
+// Explicitly enabled by the blog page for BLOG-024 only. Other articles and
+// the site title/navigation keep their existing presentation.
+---
+<style>
+  :global(.post-content[data-photo-presentation="balanced"] h2) {
+    font-family: "EB Garamond", Garamond, "Times New Roman", serif;
+    font-weight: 600;
+    font-size: clamp(1.65rem, 2.4vw, 2.1rem);
+    line-height: 1.2;
+    text-wrap: balance;
+    margin-block: 1.8em 0.7em;
+  }
+
+  /* Share the image and caption tracks, rather than centering each whole
+     figure (which would let caption length move the photographs). */
+  @media (min-width: 601px) {
+    :global(.post-content[data-photo-presentation="balanced"] .article-photo-row) {
+      align-items: center;
+    }
+    @supports (grid-template-rows: subgrid) {
+      :global(.post-content[data-photo-presentation="balanced"] .article-photo-row) {
+        grid-template-rows: auto auto;
+        row-gap: 0;
+        align-items: stretch;
+      }
+      :global(.post-content[data-photo-presentation="balanced"] .article-photo-row .post-figure) {
+        display: grid;
+        grid-row: span 2;
+        grid-template-rows: subgrid;
+        align-self: stretch;
+      }
+      :global(.post-content[data-photo-presentation="balanced"] .article-photo-row .article-image-trigger) {
+        align-self: stretch;
+        margin-block: 0;
+      }
+      :global(.post-content[data-photo-presentation="balanced"] .article-photo-row .post-figcaption) {
+        align-self: start;
+        margin-top: 10px;
+      }
+    }
+  }
+
+  :global(.article-photo-rich-tooltip) {
+    position: fixed;
+    z-index: 1100;
+    box-sizing: border-box;
+    max-width: min(360px, calc(100vw - 16px));
+    padding: 8px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 3px;
+    background: #111;
+    color: #fff;
+    font-family: "EB Garamond", Garamond, "Times New Roman", serif;
+    font-size: 1rem;
+    line-height: 1.35;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
+  }
+  :global(.article-photo-rich-tooltip[hidden]) { display: none; }
+</style>
+<script>
+  import { createPhotoTooltip, photoHoverText, photoTextParts, renderPhotoText } from "../lib/articlePhotoText.js";
+
+  const enhancePhotoEssay = () => {
+    const root = document.querySelector('.post-content[data-photo-presentation="balanced"]');
+    if (!root || root.hasAttribute("data-photo-enhanced")) return;
+
+    const enhance = () => {
+      // ArticleImages owns figure grouping and the lightbox. Wait for its
+      // normal initialization regardless of Astro's bundled-script order.
+      if (!root.querySelector(".article-image-trigger")) return false;
+      if (root.hasAttribute("data-photo-enhanced")) return true;
+      root.setAttribute("data-photo-enhanced", "true");
+      const tooltip = createPhotoTooltip();
+      const photos = Array.from(root.querySelectorAll("img"));
+      for (const img of photos) {
+        const caption = img.closest("figure")?.querySelector("figcaption");
+        if (caption) renderPhotoText(caption, img.getAttribute("data-caption") ?? img.getAttribute("alt") ?? "", true);
+        tooltip.bind(img, img.closest("button") ?? img);
+      }
+
+      const lightbox = document.getElementById("article-lightbox");
+      const image = lightbox?.querySelector(".article-lightbox-image");
+      const caption = lightbox?.querySelector(".article-lightbox-caption");
+      if (image) {
+        tooltip.bind(image);
+        new MutationObserver(() => {
+          tooltip.hide();
+          const src = image.getAttribute("src");
+          const original = src && photos.find((photo) => (photo.currentSrc || photo.src) === image.src);
+          tooltip.setText(image, original ? photoHoverText(original) : null);
+        }).observe(image, { attributes: true, attributeFilter: ["src"] });
+      }
+      if (caption) {
+        new MutationObserver(() => {
+          const text = caption.textContent || "";
+          if (photoTextParts(text).some((part) => part.italic)) renderPhotoText(caption, text, true);
+        }).observe(caption, { childList: true, characterData: true, subtree: true });
+      }
+      return true;
+    };
+
+    if (!enhance()) {
+      const observer = new MutationObserver(() => { if (enhance()) observer.disconnect(); });
+      observer.observe(root, { childList: true, subtree: true });
+    }
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", enhancePhotoEssay, { once: true });
+  } else {
+    enhancePhotoEssay();
+  }
+</script>
