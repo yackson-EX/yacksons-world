@@ -1,6 +1,6 @@
 ---
 title: "My Time at PRGE ’26"
-pubDate: 2026-10-23T07:00:00-07:00
+pubDate: 2026-10-23T00:00:00-07:00
 category: "Travel / events"
 imageAlign: center
 ---
