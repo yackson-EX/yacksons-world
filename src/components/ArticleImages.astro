@@ -283,6 +283,8 @@
         const triggers = [];
         let currentIndex = -1;
         let previousFocus = null;
+        let previousScroll = { x: 0, y: 0 };
+        let restoreScrollFrame = 0;
 
         // Keep linked images acting as links; turn other post images into accessible buttons.
         for (const img of container.querySelectorAll("img")) {
@@ -310,8 +312,19 @@
           }
           if (lightboxCaption) lightboxCaption.textContent = "";
           currentIndex = -1;
-          if (previousFocus instanceof HTMLElement) previousFocus.focus();
+          // Return keyboard focus without letting it move the article or a photo row.
+          if (previousFocus instanceof HTMLElement && previousFocus.isConnected) {
+            previousFocus.focus({ preventScroll: true });
+          }
           previousFocus = null;
+          const { x, y } = previousScroll;
+          const restoreScroll = () => window.scrollTo({ left: x, top: y, behavior: "instant" });
+          restoreScroll();
+          // Mobile browsers can finish removing the scroll lock on the next frame.
+          restoreScrollFrame = requestAnimationFrame(() => {
+            restoreScrollFrame = 0;
+            if (!lightbox.classList.contains("is-open")) restoreScroll();
+          });
         };
 
         const openAtIndex = (index) => {
@@ -332,12 +345,17 @@
           }
           currentIndex = index;
           if (!lightbox.classList.contains("is-open")) {
-            previousFocus = document.activeElement;
+            cancelAnimationFrame(restoreScrollFrame);
+            restoreScrollFrame = 0;
+            // Save once per opening, not when swiping to another photo. A tapped
+            // button is not always document.activeElement on mobile browsers.
+            previousScroll = { x: window.scrollX, y: window.scrollY };
+            previousFocus = triggers[index];
             lightbox.classList.add("is-open");
             lightbox.setAttribute("aria-hidden", "false");
             document.documentElement.classList.add("article-lightbox-open");
             document.body.classList.add("article-lightbox-open");
-            closeButton?.focus();
+            closeButton?.focus({ preventScroll: true });
           }
         };
 
@@ -383,10 +401,10 @@
             const last = buttons[buttons.length - 1];
             if (event.shiftKey && document.activeElement === first) {
               event.preventDefault();
-              last?.focus();
+              last?.focus({ preventScroll: true });
             } else if (!event.shiftKey && document.activeElement === last) {
               event.preventDefault();
-              first?.focus();
+              first?.focus({ preventScroll: true });
             }
           }
         });
