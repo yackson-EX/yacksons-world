@@ -1,6 +1,8 @@
 ---
 // Shared photo viewer for Blog, Reviews, About and F.A.Q.; not Photography.
 // Feature one image in Markdown: ![Caption](/uploads/photo.jpg "{wide}")
+// Independent text: <img src="..." alt="Description" data-caption="Caption" title="Hover">
+// Use class="post-image-wide" or data-photo-pair="true" alongside independent hover text.
 ---
 
   <div class="article-lightbox" id="article-lightbox" aria-hidden="true">
@@ -32,6 +34,7 @@
   :global(.post-content.images-left .article-image-trigger) { margin-left: 0; margin-right: auto; }
   :global(.post-content.images-right .article-image-trigger) { margin-left: auto; margin-right: 0; }
   :global(.post-content .post-figure) { max-width: 100%; }
+  :global(.post-content .post-figcaption) { white-space: pre-wrap; }
 
   /* Paired article photos retain individual captions and lightbox controls.
      Authors mark two adjacent Markdown images with the title "{pair}". */
@@ -138,6 +141,7 @@
       text-align: center;
       font-size: 0.95em;
       opacity: 0.85;
+      white-space: pre-wrap;
     }
 
     .article-lightbox-close {
@@ -188,6 +192,10 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
+      // Omitted data-caption keeps legacy alt-as-caption behavior; an empty value
+      // deliberately suppresses the caption without losing descriptive alt text.
+      const captionFor = (img) => img.getAttribute("data-caption") ?? img.getAttribute("alt") ?? "";
+
       const figuresFromImages = (root) => {
         const imgs = Array.from(root.querySelectorAll("img"));
         imgs.forEach((img) => {
@@ -200,21 +208,23 @@
             img.removeAttribute("title");
           }
           if (img.dataset.captionized) return;
-          const caption = img.getAttribute("alt");
+          const caption = captionFor(img);
           const width = Number(img.getAttribute("width"));
           const height = Number(img.getAttribute("height"));
           if (width > 0 && height > 0) {
             img.style.aspectRatio = `${width} / ${height}`;
           }
-          if (!caption) return;
+          if (!caption && !img.hasAttribute("data-caption")) return;
 
           const figure = document.createElement("figure");
           figure.className = "post-figure";
           if (root.classList.contains("images-left")) figure.classList.add("images-left");
           if (root.classList.contains("images-right")) figure.classList.add("images-right");
-          const figcaption = document.createElement("figcaption");
-          figcaption.className = "post-figcaption";
-          figcaption.textContent = caption;
+          const figcaption = caption ? document.createElement("figcaption") : null;
+          if (figcaption) {
+            figcaption.className = "post-figcaption";
+            figcaption.textContent = caption;
+          }
 
           const parent = img.parentNode;
           if (!parent) return;
@@ -224,14 +234,14 @@
           if (parent.tagName === "P") {
             parent.insertAdjacentElement("afterend", figure);
             figure.appendChild(img);
-            figure.appendChild(figcaption);
+            if (figcaption) figure.appendChild(figcaption);
             if (!parent.textContent.trim()) {
               parent.remove();
             }
           } else {
             parent.insertBefore(figure, img);
             figure.appendChild(img);
-            figure.appendChild(figcaption);
+            if (figcaption) figure.appendChild(figcaption);
           }
 
           img.dataset.captionized = "true";
@@ -292,6 +302,7 @@
           if (lightboxImage) {
             lightboxImage.removeAttribute("src");
             lightboxImage.alt = "";
+            lightboxImage.removeAttribute("title");
           }
           if (lightboxCaption) lightboxCaption.textContent = "";
           currentIndex = -1;
@@ -307,7 +318,14 @@
           if (!source) return;
           lightboxImage.src = source;
           lightboxImage.alt = img.alt;
-          if (lightboxCaption) lightboxCaption.textContent = img.alt || "";
+          const hover = img.getAttribute("title");
+          if (hover === null) lightboxImage.removeAttribute("title");
+          else lightboxImage.setAttribute("title", hover);
+          if (lightboxCaption) {
+            const caption = captionFor(img);
+            lightboxCaption.textContent = caption;
+            lightboxCaption.hidden = !caption;
+          }
           currentIndex = index;
           if (!lightbox.classList.contains("is-open")) {
             previousFocus = document.activeElement;

@@ -50,10 +50,18 @@ All commands are run from the root of the project, from a terminal:
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
 
 ## Posting images (blog/reviews/Decap)
-- Visible captions come from the image `alt` only. If you want hover text without a visible caption, set a Title and leave Alt empty. If you set both, Alt shows under the image; Title is hover-only.
+- Existing Markdown images keep their current behavior: `alt` supplies the visible caption and accessible description, and a regular Title supplies hover text.
+- For independent accessible descriptions, visible captions, and hover text, use an HTML image block in the Markdown source (or Decap's Markdown/source mode):
+
+  ```html
+  <img src="/uploads/photo.jpg" alt="A descriptive account of the photograph" data-caption="The visible caption" title="The hover text">
+  ```
+
+  `data-caption` supplies the caption below the photo and in the enlarged viewer; `alt` remains the accessible description in both. Omit `data-caption` to retain the existing Alt caption, or use `data-caption=""` to show no caption while retaining accessible Alt text. Caption and hover values are plain text, so punctuation, asterisks, emoticons, and caption spacing are preserved. Escape attribute characters such as `&` as `&amp;` and `"` as `&quot;`.
+- Keep each HTML image in its own blank-line-separated block. Add `class="post-image-wide"` for a wide image, or add `data-photo-pair="true"` to each of two adjacent images for a paired row. These attributes leave `title` available for hover text.
 - Alignment comes from `imageAlign` frontmatter (`left`, `right`, `center`); captions follow the image alignment automatically.
 - Collections with alignment in Decap: Blog, Reviews, About, FAQ. Photography is intentionally fixed-layout (no alignment field).
-- If a Markdown image is inside a paragraph, the page runtime will move the image into a `<figure>` placed after that paragraph and add a `<figcaption>` using the title/alt text. Empty paragraphs left behind are removed. You don’t need to do anything special—just know this normalization happens for proper caption alignment.
+- If an image is inside a paragraph, the page runtime will move the image into a `<figure>` placed after that paragraph and add a `<figcaption>` using `data-caption` (or legacy Alt). Empty paragraphs left behind are removed. This normalization keeps caption alignment consistent.
 - Photography collection: captions come from the `caption` field; alt text from `alt` (fallback `title`).
 
-- Written pages (Blog, Reviews, About, F.A.Q.) retain their original compact image display by default. To feature one larger photograph, use the reserved Markdown image title `{wide}`, as in `![Caption](/uploads/photo.jpg "{wide}")`. The marker is removed from hover text. Visible captions continue to use Alt; unlinked images can be clicked to enlarge. The separate Photography gallery is unchanged.
+- Written pages (Blog, Reviews, About, F.A.Q.) retain their original compact image display by default. Existing Markdown layout markers still work: `{wide}`, as in `![Caption](/uploads/photo.jpg "{wide}")`, features a larger photograph; two adjacent images titled `{pair}` form a paired row. These markers are removed from hover text. Unlinked images can be clicked to enlarge. The separate Photography gallery is unchanged.
