@@ -27,6 +27,10 @@
     cursor: url("/cursors/cursor2.cur"), url("/cursors/cursor-fallback.png") 2 2,
       url("/cursors/cursor.png") 2 2, pointer;
   }
+  /* Override the global default on the image, not only its clickable wrapper. */
+  :global(.post-content .article-image-trigger img) {
+    cursor: inherit;
+  }
   :global(.post-content .article-image-trigger:focus-visible) {
     outline: 2px solid #fff;
     outline-offset: 3px;
