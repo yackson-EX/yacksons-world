@@ -176,7 +176,7 @@ Inside the tent were four extremely playful kittens, one of whom kept trying to 
 The big event of the afternoon was Tama Hero's Pokémon trivia panel. I knew her videos well enough to expect actual questions, not just an opportunity to identify Pikachu, and I was very excited to participate. Tama-themed plushes were available as prizes. I wanted one badly enough to get straight into line.
 
 
-Tama had set up her trivia game like Jeopardy: select a category, and select a difficulty. Answer correctly in front of the crowd, win a plush. For my first attempt, I chose “Mainline Mechanics, Hard.” Her question tasked me with listing every type that makes up the elite four in *Pokemon X & Y*. If that question sounds ridiculous to you, don’t feel too bad. This question immediately flattened me. Tama generously gave two guesses, which I used to demonstrate that I was capable of being wrong twice. Back to the end of the line I went.
+Tama had set up her trivia game like Jeopardy: select a category, and select a difficulty. Answer correctly in front of the crowd, win a plush. For my first attempt, I chose “Mainline Mechanics, Hard.” Her question tasked me with listing every type that makes up the elite four in *Pokémon X & Y*. If that question sounds ridiculous to you, don’t feel too bad. This question immediately flattened me. Tama generously gave two guesses, which I used to demonstrate that I was capable of being wrong twice. Back to the end of the line I went.
 
 
 On the second attempt, I downgraded to Medium and got asked which stats Dragon Dance raises. I know this. I have used this move countless times. But the first round had damaged my confidence so thoroughly that I briefly began questioning the foundations of Pokémon in my head: *“Attack? Special Attack? Surely not both?”* I finally managed to cautiously mutter, "Speed... and... Attack?"
@@ -188,7 +188,7 @@ Correct. Plush acquired. Dignity partially recovered.
 The rules were not negotiable, either. There was an enormous supply of prizes, but missing the question did not earn you a consolation prize. Hilariously, there were *children* there that answered multiple questions incorrectly. They received no prizes. As I put it afterward, the plush cost me zero dollars. It cost me everything psychologically. (╥﹏╥)
 
 
-<img src="/uploads/prge26-p26-059-tama-trivia.jpeg" alt="Answering a question into a microphone beside the host at the Pokemon trivia panel." data-caption="*Yackson used Dragon Dance*" title="I was assigned a replay of Pokemon X &amp; Y as homework (╥﹏╥)" width="2048" height="1536" loading="lazy" decoding="async" class="post-image-wide">
+<img src="/uploads/prge26-p26-059-tama-trivia.jpeg" alt="Answering a question into a microphone beside the host at the Pokémon trivia panel." data-caption="*Yackson used Dragon Dance*" title="I was assigned a replay of Pokémon X &amp; Y as homework (╥﹏╥)" width="2048" height="1536" loading="lazy" decoding="async" class="post-image-wide">
 
 
 Tama signed its paper tag after the panel, giving me both a prize I'd actually earned and an autograph to make it special. I was thrilled. But after getting grilled in trivia and now attempting to request autographs, at this point I was rattled, and I left the interaction without asking the other thing I'd been hoping for.
@@ -215,7 +215,7 @@ I waited until they were done, took out my Pokéwalker, and asked whether she ha
 Yes. That was very much the idea.
 
 
-I had my shiny Jirachi, obtained through the *Pokémon Channel* distribution, walking with me. Tama had Ledyba. After the trivia ordeal, I found it extremely funny that the panelist responsible for roasting me in Pokemon trivia had come to the convention with a little ladybug. I liked it even more for being such an unpretentious choice.
+I had my shiny Jirachi, obtained through the *Pokémon Channel* distribution, walking with me. Tama had Ledyba. After the trivia ordeal, I found it extremely funny that the panelist responsible for roasting me in Pokémon trivia had come to the convention with a little ladybug. I liked it even more for being such an unpretentious choice.
 
 
 We connected the devices. She noticed my Jirachi, asked about it, and then asked which item I'd received from the exchange. I got a rather useless “Rare Bone.” She got Choice Specs, an absolute staple in competitive play. Even in a brief, friendly infrared interaction, Tama had somehow walked away with the better item.
@@ -224,10 +224,10 @@ We connected the devices. She noticed my Jirachi, asked about it, and then asked
 It's a small thing to describe on paper: two people standing at a table, pointing pedometers at each other. But this was the highlight of my entire weekend. Somebody whose videos had been part of my enjoyment of Pokémon for years was, for a moment, simply another person playing my favorite game with me. The connection even carries into the game through the Pokéwalker Diary and the trainer data you can battle in the Trainer House. She hadn't just signed something for me; she'd found a permanent, lasting way into my copy of *SoulSilver*. And at this point, I was happily on my way.
 
 
-<img src="/uploads/prge26-p26-060-pokewalker-diary.jpeg" alt="A Pokewalker diary screen records a battle with Tama&#x27;s Milkyway and says that JIRACHI barely won." data-caption="*By God, it&#x27;s Jirachi with a steel chair!*" title="The most complicated way anybody has ever obtained a Rare Bone." width="1435" height="1080" loading="lazy" decoding="async" data-photo-pair="true">
+<img src="/uploads/prge26-p26-060-pokewalker-diary.jpeg" alt="A Pokéwalker diary screen records a battle with Tama&#x27;s Milkyway and says that JIRACHI barely won." data-caption="*By God, it&#x27;s Jirachi with a steel chair!*" title="The most complicated way anybody has ever obtained a Rare Bone." width="1435" height="1080" loading="lazy" decoding="async" data-photo-pair="true">
 
 
-<img src="/uploads/prge26-p26-061-trainer-house.png" alt="A Pokemon SoulSilver Trainer House battle screen announces: You are challenged by Beauty Tama!" data-caption="Now, if I want to get humbled by Tama, I don&#x27;t even have to leave home!" title="First she grilled me at trivia. I then proceeded to unleash war crimes on her gen 4 team." width="1748" height="1366" loading="lazy" decoding="async" data-photo-pair="true">
+<img src="/uploads/prge26-p26-061-trainer-house.png" alt="A Pokémon SoulSilver Trainer House battle screen announces: You are challenged by Beauty Tama!" data-caption="Now, if I want to get humbled by Tama, I don&#x27;t even have to leave home!" title="First she grilled me at trivia. I then proceeded to unleash war crimes on her gen 4 team." width="1748" height="1366" loading="lazy" decoding="async" data-photo-pair="true">
 
 
 Later, I went to Tom DuBois' panel. Before we entered, his representative Daniel told the waiting crowd that this was Tom's first convention and that he was nervous, and asked us to give him a proper welcome. We did. The room erupted when he was introduced, and he seemed almost embarrassed by how much everyone wanted to applaud him.
@@ -317,10 +317,10 @@ Gail also described the preview VHS campaign, using Nintendo Power subscriber ad
 Better yet, I had brought that exact original promotional VHS for Gail to sign, and she happened to have a sealed copy of the same tape at her table. After the panel, some attendees were asking about its contents, so I offered my opened copy. She lit up, pulled out the inserts, and then took it over to Frank so they could look through it together. Only afterward did she sign the sleeve in gold. An old tape I'd packed as an autograph item had briefly become useful to the people explaining its history. That was an excellent return on my decision to pack it.
 
 
-<img src="/uploads/prge26-p26-083-pokemon-panel.jpg" alt="Two speakers seated at the early Pokemon history panel, with name cards for Gail Tilden and Frank Cifaldi." data-caption="The Sunday Pokémon history lesson that unexpectedly included vehicular atrocities." title="I went to learn about Pokemon&#x27;s marketing. I left with a severe distrust of bus drivers." width="1933" height="1538" loading="lazy" decoding="async" data-photo-pair="true">
+<img src="/uploads/prge26-p26-083-pokemon-panel.jpg" alt="Two speakers seated at the early Pokémon history panel, with name cards for Gail Tilden and Frank Cifaldi." data-caption="The Sunday Pokémon history lesson that unexpectedly included vehicular atrocities." title="I went to learn about Pokémon&#x27;s marketing. I left with a severe distrust of bus drivers." width="1933" height="1538" loading="lazy" decoding="async" data-photo-pair="true">
 
 
-<img src="/uploads/prge26-p26-085-signed-pokemon-vhs.jpg" alt="A Pokemon promotional VHS sleeve with a gold autograph across the front artwork." data-caption="1998: Please watch Pokémon. 2026: Please sign this videotape I brought on a plane." title="Gail and Frank examined my inserts. ALL MY HOARDING HAS BEEN VINDICATED." width="4032" height="3024" loading="lazy" decoding="async" data-photo-pair="true">
+<img src="/uploads/prge26-p26-085-signed-pokemon-vhs.jpg" alt="A Pokémon promotional VHS sleeve with a gold autograph across the front artwork." data-caption="1998: Please watch Pokémon. 2026: Please sign this videotape I brought on a plane." title="Gail and Frank examined my inserts. ALL MY HOARDING HAS BEEN VINDICATED." width="4032" height="3024" loading="lazy" decoding="async" data-photo-pair="true">
 
 
 Next came a sidequest for my cousin, Joey, who'd bought a ModRetro Chromatic, a device that allows the use of original Game Boy games. He gave me $200, one firm request—*Motocross Maniacs*—and otherwise wanted good, working cartridges rather than display pieces.
@@ -398,7 +398,7 @@ I love the games, and I'm very happy with what I brought home. But the things th
 The games were a good enough reason to fly to Portland. The people are why I'm so glad I did.
 
 
-That’s all, dood\! &emsp;&emsp;o(_ _)o
+That’s all, dood\! &emsp;o(_ _)o
 
 
 \- Yackson

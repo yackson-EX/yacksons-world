@@ -41,6 +41,12 @@
     }
   }
 
+  /* Keep the Mac DeMarco VHS photo modest beside its movie-poster companion. */
+  :global(.post-content[data-photo-presentation="balanced"] .article-photo-row .post-figure img[src$="/prge26-mac-demarco-vhs.jpg"]) {
+    max-width: 65%;
+    max-height: min(32.5vh, 325px);
+  }
+
   :global(.article-photo-rich-tooltip) {
     position: fixed;
     z-index: 1100;
