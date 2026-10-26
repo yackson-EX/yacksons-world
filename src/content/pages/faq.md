@@ -160,4 +160,4 @@ Absolutely not.
 Yackson is working really hard on the F.A.Q. page and is definitely not eating pizza.
 
 
-![Live Yackson cam](/uploads/pizza.gif)
+![Live Yackson cam [◉"]](/uploads/pizza.gif "Live Yackson cam [◉\"]")
