@@ -22,11 +22,17 @@ Well, dear reader, I am pleased to report that I am alive, well-fed, and in reas
 
 It's Halloween night, October 31, 2026, and I'm sitting in a dimly lit parlor at an enormous antique table, upon which somebody has arranged an equally antique-looking chess set. The table creaks whenever I move, and I've conveniently discovered an electrical outlet running along the floorboards. So here I am.
 
+<img src="/uploads/sac-halloween-2026-writing.webp" alt="A small CHUWI laptop displaying Yackson's World in the dark, red-lit Victorian parlor, beside an antique chess set." data-caption="Working from home!" title="The outlet was conveniently located. Almost TOO conveniently." width="1280" height="960" loading="eager" decoding="async" class="post-image-wide" style="max-width: min(720px,100%); max-height: 78vh; width: auto; height: auto;">
+
 Why am I here? Well, I'm spending the weekend at Sac Gamers Expo, a gaming convention taking place at Cal Expo. Today, I dressed up as Hero Prinny from *Disgaea*, met some lovely people, and participated in my first cosplay contest. It was a wonderful time. Afterward, I retired to downtown Sacramento, where I spent an unreasonable amount of time playing a broken Tetris arcade machine while a Halloween party slowly erupted around me.
+
+<img src="/uploads/sac-halloween-2026-prinny.webp" alt="Yackson in his homemade blue Hero Prinny costume with red scarf, blue flippers and brown pouch." data-caption="The author, earlier today. Please take him seriously." title="A hero who has failed to locate a single Ultra Dessert." width="721" height="1280" loading="lazy" decoding="async" class="post-image-wide" style="max-width: min(560px,100%); max-height: 78vh; width: auto; height: auto;">
 
 But the convention is a story for another day. Tonight, I'd like to talk about ghosts.
 
 You see, when I was planning this trip, I decided to book myself a room at the HI Sacramento Hostel. This establishment occupies an enormous Victorian mansion, and as luck would have it, I would be spending Halloween night inside it. What fun!
+
+<img src="/uploads/sac-halloween-2026-mansion.webp" alt="The grand Victorian HI Sacramento Hostel illuminated at night beneath a cloudy Halloween sky, in a straightened photograph." data-caption="146 years old and still accepting reservations from idiots like me." title="My accommodations for Halloween night. What could possibly go wrong?" width="960" height="1280" loading="lazy" decoding="async" class="post-image-wide" style="max-width: min(560px,100%); max-height: 78vh; width: auto; height: auto;">
 
 And now that I've arrived, I must admit that the place is even more ridiculous than I'd imagined.
 
@@ -34,11 +40,15 @@ The building is extraordinarily quiet. The floors creak, the furniture groans, a
 
 There's also a rather unsettling masquerade mask near the staircase that I must pass every time I want to reach my room. It's positioned in such a way that it appears to be watching me approach...
 
+<img src="/uploads/sac-halloween-2026-mask.webp" alt="An unsettling masquerade mask watching over the top of a narrow, dark blue staircase." data-caption="The welcoming committee." title="The management has provided no explanation for this individual's behavior." width="960" height="1280" loading="lazy" decoding="async" class="post-image-wide" style="max-width: min(560px,100%); max-height: 78vh; width: auto; height: auto;">
+
 The lighting is equally suspicious. Certain rooms are illuminated by a handful of lamps, while others have red light bulbs. There seems to be a deliberate refusal to illuminate an entire room at once. Enough light to find your way around, but not quite enough to be certain about what might be lurking in the corners.
 
 Speaking of corners, when I first entered my room, I noticed an old upholstered chair tucked into one of them. It looked rather creepy, so naturally I wanted a photograph. I took note of its position, turned around to set down my belongings, and when I looked back, I could have sworn the chair had rotated an inch or two toward a nearby lamp.
 
 I actually had to straighten it again to get the picture I wanted.
+
+<img src="/uploads/sac-halloween-2026-chair.webp" alt="The antique blue upholstered chair in Room 33, with an almost imperceptible, digitally added ghostly cat-gorilla seated in it." data-caption="It knows what it did." title="The chair in question. I am not making any accusations." width="1280" height="960" loading="lazy" decoding="async" class="post-image-wide" style="max-width: min(720px,100%); max-height: 78vh; width: auto; height: auto;">
 
 Now, I'm not suggesting that the chair moved by itself. I could have bumped it, or misremembered its original position. But I am suggesting that this is a remarkable thing to experience within five minutes of arriving at an enormous Victorian mansion on Halloween.
 
