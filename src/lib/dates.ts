@@ -3,6 +3,7 @@ export const formatListDate = (date: Date) =>
     day: "2-digit",
     month: "short",
     year: "numeric",
+    timeZone: "America/Los_Angeles",
   })
     .format(date)
     .replace(/ /g, "-");
@@ -13,4 +14,5 @@ export const formatFullDate = (date: Date) =>
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: "America/Los_Angeles",
   }).format(date);
